@@ -1,14 +1,5 @@
- 
-#------------------------------------------------------------------------------#
-SCREEN_NAME=test
-USER=$(whoami)
-FILE="../discord/musicbot/"
-JAR="../discord/musicbot/ProcessName"
 #------------------------------------------------------------------------------#
 #メッセージ関係
-FILETRUE="ファイルが存在します"
-FILEFALSE="ファイルが存在しません"
-FILEDOWNLOAD="ファイルをダウンロードしますか? (y/n):"
 BOTSTART="Music Bot is starting!!"
 ENDSERVICE="サービスを終了します..."
 FILEDELETE="ファイルを削除しました"
@@ -16,7 +7,13 @@ ProcessName="JMusicBot-0.2.6-Linux.jar"
 SERVICECHECK="サービスが終了したか確認しています"
 SERVICEALIVE="サービスは終了していません、終了しますか?"
 SERVICEDEAD="サービスの終了を確認しました"
+
+#ファイル関係メッセージ
 FILEDELETED="ファイルを削除しますか? (y/n):"
+FILETRUE="ファイルが存在します"
+FILEFALSE="ファイルが存在しません"
+FILEDOWNLOAD="ファイルをダウンロードしますか? (y/n):"
+FILEDOWNLOADNOW="ファイルをダウンロードしています"
 #------------------------------------------------------------------------------#
 #旧設定
 #JAR="/home/$USER/デスクトップ/disocrd/musicbot/JMusicBot-0.2.6-Linux.jar"
