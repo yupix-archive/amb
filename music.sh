@@ -48,7 +48,7 @@ start)
         echo "$FILETRUE"
         echo "$BOTSTART"
         cd $FILE
-        java -jar JMusicBot-$VERSION.jar
+        java -jar JMusicBot-$VERSION-$EDITION.jar
         echo "$SERVICECHECK"
         count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
         if [ $count = 0 ]; then
@@ -63,10 +63,10 @@ start)
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/0.2.6/JMusicBot-$VERSION.jar
-            mv ./JMusicBot-$VERSION.jar /home/$USER/デスクトップ/disocrd/musicbot/
+            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+            mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
             cd $FILE
-            java -jar JMusicBot-$VERSION.jar
+            java -jar JMusicBot-$VERSION-$EDITION.jar
             echo "$SERVICECHECK"
             count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
             if [ $count = 0 ]; then
@@ -112,8 +112,8 @@ start)
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            sudo wget https://github.com/jagrosh/MusicBot/releases/download/0.2.6/JMusicBot-$VERSION.jar
-            mv ./JMusicBot-$VERSION.jar /home/$USER/デスクトップ/disocrd/musicbot/
+            sudo wget https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+            mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
             cd $FILE
             $STARTPLUS
             echo "$SERVICECHECK"

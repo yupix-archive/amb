@@ -3,7 +3,7 @@
 BOTSTART="Music Bot is starting!!"
 ENDSERVICE="サービスを終了します..."
 FILEDELETE="ファイルを削除しました"
-ProcessName="JMusicBot-$VERSION.jar"
+ProcessName="JMusicBot-$VERSION-$EDITION.jar"
 SERVICECHECK="サービスが終了したか確認しています"
 SERVICEALIVE="サービスは終了していません、終了しますか?"
 SERVICEDEAD="サービスの終了を確認しました"
@@ -16,6 +16,6 @@ FILEDOWNLOAD="ファイルをダウンロードしますか? (y/n):"
 FILEDOWNLOADNOW="ファイルをダウンロードしています"
 #------------------------------------------------------------------------------#
 #旧設定
-#JAR="/home/$USER/デスクトップ/disocrd/musicbot/JMusicBot-$VERSION.jar"
+#JAR="/home/$USER/デスクトップ/disocrd/musicbot/JMusicBot-$VERSION-$EDITION.jar"
 #FILE="/home/$USER/デスクトップ/disocrd/musicbot/"
 #------------------------------------------------------------------------------#
