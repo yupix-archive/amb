@@ -3,4 +3,5 @@ SCREEN_NAME=test
 USER=$(whoami)
 FILE="../discord/musicbot/"
 JAR="../discord/musicbot/ProcessName"
+VERSION="$VERSION"
 #------------------------------------------------------------------------------#
