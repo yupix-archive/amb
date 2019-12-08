@@ -40,11 +40,9 @@ main() {
         echo "ファイルの生成に失敗しました"
     fi
 }
-#------------------------------------------------------------------------------#
-
-case $1 in
-start)
+systemstart() {
     if [ -e $JAR ]; then
+        sudo chmod u+x $JAR
         echo "$FILETRUE"
         echo "$BOTSTART"
         cd $FILE
@@ -59,12 +57,13 @@ start)
         echo "$ENDSERVICE"
         exit
     else
-        echo "$FILEFALSE"
+        echo "$JARFALSE"
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
-            mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
+            echo "sudo等が求められた場合は入力してください"
+            sudo wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+            mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
             java -jar JMusicBot-$VERSION-$EDITION.jar
             echo "$SERVICECHECK"
@@ -80,6 +79,42 @@ start)
         [nN]) echo "$ENDSERVICE" ;;
         *) ;;
         esac
+    fi
+}
+#------------------------------------------------------------------------------#
+
+case $1 in
+start)
+    echo "SYSTEMFILEが存在するか確認しています..."
+    echo "ファイルを確認中 1/2"
+    if [ -e $SYSTEMFILE ]; then
+        echo "ファイルが存在します"
+        echo "ファイルを確認中 2/2"
+        if [ -e $SYSTEMFILEMUSIC ]; then
+        echo "ファイルが存在します"
+        echo "SYSTEMを開始します"
+        systemstart
+        else
+        echo "ファイルが不足しています。"
+        echo "ファイルを作成します"
+        mkdir "discord/music/"
+        echo "SYSTEMを開始します"
+        systemstart
+        fi
+    else
+        mkdir "discord"
+        echo "ファイルを作成しました"
+    if [ -e $SYSTEMFILE ]; then
+        echo "ファイルが存在します"
+        echo "SYSTEMを開始します"
+        systemstart
+        echo "ファイルを確認中 2/2"
+        if [ -e $SYSTEMFILEMUSIC ]; then
+        echo "ファイル"
+        else
+        echo "test"
+        fi
+    fi
     fi
     ;;
 "start -d")
@@ -113,7 +148,7 @@ start)
         case "$DATA" in
         [yY])
             sudo wget https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
-            mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
+            mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
             $STARTPLUS
             echo "$SERVICECHECK"
@@ -206,6 +241,45 @@ case "$CLEANCONFI" in
 #        read SETPREFIX
 #    sed -e 's/$PREFIX/prefix = $SETPREFIX/g' $FILE/config.txt
 #
+#    ;;
+#startw)
+#    if [ -e $JAR ]; then
+#        echo "$FILETRUE"
+#        echo "$BOTSTART"
+#        cd $FILE
+#        java -jar JMusicBot-$VERSION-$EDITION.jar
+#        echo "$SERVICECHECK"
+#        count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+#        if [ $count = 0 ]; then
+#            echo "$SERVICEDEAD"
+#        else
+#            echo "$SERVICEALIVE"
+#        fi
+#        echo "$ENDSERVICE"
+#        exit
+#    else
+#        echo "$FILEFALSE"
+#        read -p "$FILEDOWNLOAD " DATA
+#        case "$DATA" in
+#        [yY])
+#            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+#           mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
+#           cd $FILE
+#           java -jar JMusicBot-$VERSION-$EDITION.jar
+#            echo "$SERVICECHECK"
+#            count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+#            if [ $count = 0 ]; then
+#                echo "$SERVICEDEAD"
+#           else
+#                echo "$SERVICEALIVE"
+#            fi
+#            echo "$ENDSERVICE"
+#            exit
+#            ;;
+#        [nN]) echo "$ENDSERVICE" ;;
+#        *) ;;
+#        esac
+#    fi
 #    ;;
 *)
     echo -e "\033[1;37m##=======================================##\033[0;39m"

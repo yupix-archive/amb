@@ -1,9 +1,13 @@
 #------------------------------------------------------------------------------#
 SCREEN_NAME=test
 USER=$(whoami)
-FILE="../discord/musicbot/"
-JAR="../discord/musicbot/ProcessName"
+FILE="./discord/music/"
 VERSION="0.2.6"
 EDITION="Linux"
+SYSTEMFILEMUSIC="./discord/music"
+ProcessName="JMusicBot-$VERSION-$EDITION.jar"
 SYSTEMFILE="discord"
+JAR="./discord/music/$ProcessName"
+SYSTEMFILE="discord"
+SYSTEMMV="./discrod/musicbot/"
 #------------------------------------------------------------------------------#
