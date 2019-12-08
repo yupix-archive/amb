@@ -63,7 +63,7 @@ start)
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/0.2.6/JMusicBot-$VERSION-$EDITION.jar
+            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
             mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
             cd $FILE
             java -jar JMusicBot-$VERSION-$EDITION.jar
@@ -112,7 +112,7 @@ start)
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            sudo wget https://github.com/jagrosh/MusicBot/releases/download/0.2.6/JMusicBot-$VERSION-$EDITION.jar
+            sudo wget https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
             mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
             cd $FILE
             $STARTPLUS
