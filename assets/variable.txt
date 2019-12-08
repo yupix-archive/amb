@@ -3,5 +3,6 @@ SCREEN_NAME=test
 USER=$(whoami)
 FILE="../discord/musicbot/"
 JAR="../discord/musicbot/ProcessName"
-VERSION="$VERSION"
+VERSION="0.2.6"
+EDITION="Linux"
 #------------------------------------------------------------------------------#
