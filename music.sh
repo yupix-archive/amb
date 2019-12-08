@@ -4,7 +4,7 @@
 . ./assets/outdate.txt
 . ./assets/language/ja.txt
 . ./assets/commands.txt
-. ./assets/extensions/botplus.txt
+. ./assets/variable.txt
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
 output=$3
@@ -13,7 +13,7 @@ SELF_DIR_PATH=$(
     cd $(dirname $0)
     pwd
 )/
-OUTDATE="/home/$USER/デスクトップ/Servers/sh/assets/"
+OUTDATE="$SELF_DIR_PATH/assets/"
 #------------------------------------------------------------------------------#
 #現在の情報
 #・Prefixの表示時に関係ないのが出る
