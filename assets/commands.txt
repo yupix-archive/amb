@@ -1,0 +1,6 @@
+#------------------------------------------------------------------------------#
+#コマンド情報
+STARTPLUS="java -jar -verbose JMusicBot-0.2.6-Linux.jar"
+AUTOC="./music.sh  m server.properties ./assets/outdate.txt"
+CLEANCONFIG="rm -r ./assets/outdate.txt"
+#------------------------------------------------------------------------------#
