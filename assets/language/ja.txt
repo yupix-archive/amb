@@ -21,7 +21,7 @@ maincommand="メインコマンド~~"
 startcommand="start: musicBotをスタートします。"
 startdev="start -d: MusicBot実行時のログをコンソールに出力します"
 removecommand="remove: MusicBot本体を削除します"
-commandhelpbot"Botコマンド~~"
+commandhelpbot="Botコマンド~~"
 tokencommand="token: 現在使用しているTokenを表示します"
 settokencommand="settoken: Tokenを設定します"
 prefixcommand="prefix: 現在使用しているprefixを表示します"
@@ -29,7 +29,7 @@ statuscommand="status: MusicBotのステータスを表示します"
 configcommand="CONFIG関係~~"
 cccommand="createconfig: Token等の必要データをまとめたファイルを生成します"
 reconfigcommand="reconfig: createconfigで生成したファイルを再生成します"
-cleanCcommand"cleanconfig: createconfigで生成したファイルを削除します"
+cleanCcommand="cleanconfig: createconfigで生成したファイルを削除します"
 
 #ヘルプ表示メッセージ 変数一覧
 #commandhelp
