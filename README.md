@@ -1,3 +1,4 @@
+![AUTOMUSICBOT](https://akari.fiid.net/images/AUTOMUSICBOT.jpg "Image")
 # amb
 AutoMusicBot DiscordのBotを自動でダウンロードから、管理を行います。
 基礎構造はyupix作です。

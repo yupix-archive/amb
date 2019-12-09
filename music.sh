@@ -5,6 +5,8 @@
 . ./assets/language/ja.txt
 . ./assets/commands.txt
 . ./assets/variable.txt
+. ./newversion.txt
+. ./version.txt
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
 output=$3
@@ -82,8 +84,30 @@ systemstart() {
     fi
 }
 #------------------------------------------------------------------------------#
-
 case $1 in
+vercheck)
+    #新しいバージョン
+    curl -sl https://akari.fiid.net/app/amb/version.txt > newversion.txt
+        if [ $version = $newversion ]; then
+    echo '現在のambは最新バージョンで実行中です'
+    else
+    read -p "$最新のデータをダウンロードしますか?" Newversiondata
+    case "$Newversiondata" in
+    [yY])
+        sudo wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-Linux.zip
+        mv ./amb$newversion-Linux.zip > ../amb$newversion-Linux.zip
+        unzip ../amb$newversion-Linux.zip
+        rm -r amb
+        mkdir amb
+        mv ./amb$newversion ./amb/
+
+        ;;
+    [nN]) echo "ファイルが存在しません!" 
+    echo
+    ;;
+    esac
+fi
+;;
 start)
     echo "SYSTEMFILEが存在するか確認しています..."
     echo "ファイルを確認中 1/2"
@@ -115,7 +139,7 @@ start)
             echo "ファイルを作成します"
             mkdir "discord/music/"
             echo "SYSTEMを開始します"
-            systemstart
+            systemstartVersion
         fi
         if [ -e $SYSTEMFILE ]; then
             echo "ファイルが存在します"
@@ -306,14 +330,8 @@ cleanconfig)
     echo -e "\033[0;31mstart\033[1;39m: BOTを起動します"
     echo -e "\033[0;31mremove\033[1;39m: jarファイルを削除します"
     echo -e "\033[0;31mRECONFIG\033[1;39m: 出力ファイルを再生成します"
-    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
-    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
-    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
-    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
-    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
-    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
 
-    read -p "$FILEDELETED " musicbotstart
+    read -p musicbotstart
     case "$musicbotstart" in
     [start])
     echo "SYSTEMFILEが存在するか確認しています..."
