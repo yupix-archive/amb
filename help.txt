@@ -1,0 +1,12 @@
+コマンド | 使い方
+start: musicBotをスタートします。
+start -d: MusicBot実行時のログをコンソールに出力します
+remove: MusicBot本体を削除します
+token: 現在使用しているTokenを表示します
+settoken: Tokenを設定します
+prefix: 現在使用しているprefixを表示します
+status: MusicBotのステータスを表示します
+CONFIG関係
+createconfig: Token等の必要データをまとめたファイルを生成します
+reconfig: createconfigで生成したファイルを再生成します
+cleanconfig: createconfigで生成したファイルを削除します

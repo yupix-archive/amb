@@ -26,7 +26,7 @@ main() {
     echo "ファイルを削除しています..."
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
-            echo "ファイル削除を確認しました..."
+        echo "ファイル削除を確認しました..."
         echo "ファイルの生成を開始します..."
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
 
@@ -91,30 +91,43 @@ start)
         echo "ファイルが存在します"
         echo "ファイルを確認中 2/2"
         if [ -e $SYSTEMFILEMUSIC ]; then
-        echo "ファイルが存在します"
-        echo "SYSTEMを開始します"
-        systemstart
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
         else
-        echo "ファイルが不足しています。"
-        echo "ファイルを作成します"
-        mkdir "discord/music/"
-        echo "SYSTEMを開始します"
-        systemstart
+            echo "ファイルが不足しています。"
+            echo "ファイルを作成します"
+            mkdir "discord/music/"
+            echo "SYSTEMを開始します"
+            systemstart
         fi
     else
+        echo "SYSTEMFILEが欠落しています"
         mkdir "discord"
         echo "ファイルを作成しました"
-    if [ -e $SYSTEMFILE ]; then
-        echo "ファイルが存在します"
-        echo "SYSTEMを開始します"
-        systemstart
         echo "ファイルを確認中 2/2"
         if [ -e $SYSTEMFILEMUSIC ]; then
-        echo "ファイル"
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
         else
-        echo "test"
+            echo "ファイルが不足しています。"
+            echo "ファイルを作成します"
+            mkdir "discord/music/"
+            echo "SYSTEMを開始します"
+            systemstart
         fi
-    fi
+        if [ -e $SYSTEMFILE ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+            echo "ファイルを確認中 2/2"
+            if [ -e $SYSTEMFILEMUSIC ]; then
+                echo "ファイル"
+            else
+                echo "test"
+            fi
+        fi
     fi
     ;;
 "start -d")
@@ -206,36 +219,36 @@ status)
     echo -e "現在のステータスは $status_ です。変更する場合はsetstatusをご使用ください"
     echo "です。変更する場合はSETPREFIXをお使いください"
     ;;
-CREATECONFIG)
+createconfig)
     if [ -e $target ]; then
         main
     else
         echo "ファイルが存在しません"
     fi
     ;;
-RECONFIG)
+reconfig)
     $main
     ;;
-CLEANCONFIG)
-        read -p "$FILEDELETED " CLEANCONFI
-case "$CLEANCONFI" in
-        [yY])
-            echo "ファイルの削除を開始します"
-            $CLEANCONFIG
-            echo "ファイル有無を確認しています"
-            if [ -e ./assets/outdate.txt ]; then
-                echo "ファイルが存在しない、又は削除に失敗しました"
-                    else
-                echo "ファイルの削除に成功しました"
-            fi
-            ;;
-        [nN]) 
-        
-            ;;
+cleanconfig)
+    read -p "$FILEDELETED "
+    case "$CLEANCONFI" in
+    [yY])
+        echo "ファイルの削除を開始します"
+        $CLEANCONFIG
+        echo "ファイル有無を確認しています"
+        if [ -e ./assets/outdate.txt ]; then
+            echo "ファイルが存在しない、又は削除に失敗しました"
+        else
+            echo "ファイルの削除に成功しました"
+        fi
+        ;;
+    [nN]) ;;
+
+    \
         *) ;;
-        esac
+    esac
     ;;
-    
+
 #動作しません。
 #setprefix)
 #        read SETPREFIX
@@ -294,6 +307,70 @@ case "$CLEANCONFI" in
     echo -e "\033[0;31mremove\033[1;39m: jarファイルを削除します"
     echo -e "\033[0;31mRECONFIG\033[1;39m: 出力ファイルを再生成します"
     echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
+    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
+    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
+    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
+    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
+    echo -e "\033[0;31mCLEANCONFIG\033[1;39m: 出力したファイルを削除します"
+
+    read -p "$FILEDELETED " musicbotstart
+    case "$musicbotstart" in
+    [start])
+    echo "SYSTEMFILEが存在するか確認しています..."
+    echo "ファイルを確認中 1/2"
+    if [ -e $SYSTEMFILE ]; then
+        echo "ファイルが存在します"
+        echo "ファイルを確認中 2/2"
+        if [ -e $SYSTEMFILEMUSIC ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+        else
+            echo "ファイルが不足しています。"
+            echo "ファイルを作成します"
+            mkdir "discord/music/"
+            echo "SYSTEMを開始します"
+            systemstart
+        fi
+    else
+        echo "SYSTEMFILEが欠落しています"
+        mkdir "discord"
+        echo "ファイルを作成しました"
+        echo "ファイルを確認中 2/2"
+        if [ -e $SYSTEMFILEMUSIC ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+        else
+            echo "ファイルが不足しています。"
+            echo "ファイルを作成します"
+            mkdir "discord/music/"
+            echo "SYSTEMを開始します"
+            systemstart
+        fi
+        if [ -e $SYSTEMFILE ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+            echo "ファイルを確認中 2/2"
+            if [ -e $SYSTEMFILEMUSIC ]; then
+                echo "ファイル"
+            else
+                echo "test"
+            fi
+        fi
+    fi
+        ;;
+    [nN]) 
+    exit
+    ;;
+
+    [exit]) 
+    exit
+    ;;
+    \
+        *) ;;
+    esac
     ;;
 esac
 exit 0
