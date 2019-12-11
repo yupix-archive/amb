@@ -63,8 +63,8 @@ systemstart() {
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            echo "sudo等が求められた場合は入力してください"
-            sudo wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+            echo "ファイルのダウンロードを開始します"
+            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
             mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
             java -jar JMusicBot-$VERSION-$EDITION.jar
@@ -87,40 +87,40 @@ systemstart() {
 case $1 in
 vercheck)
     #新しいバージョン
-    curl -sl https://akari.fiid.net/app/amb/version.txt > newversion.txt
-        if [ $version = $newversion ]; then
-    echo '現在のambは最新バージョンで実行中です'
+    curl -sl https://akari.fiid.net/app/amb/version.txt >newversion.txt
+    if [ $version = $newversion ]; then
+        echo '現在のambは最新バージョンで実行中です'
     else
-    read -p "$最新のデータをダウンロードしますか?" Newversiondata
-    case "$Newversiondata" in
-    [yY])
-        #本番用
-        wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
-        mv ./amb$newversion-Linux.zip  ../amb$newversion-Linux.zip
-        cd ../
-        rm -r ./amb
-        unzip ./amb$newversion-Linux.zip
-        rm -r ./amb$newversion-Linux.zip
-        mv ./amb$newversion-Linux ./amb
+        read -p "$最新のデータをダウンロードしますか?" Newversiondata
+        case "$Newversiondata" in
+        [yY])
+            #本番用
+            wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+            cd ../
+            rm -r ./amb
+            unzip ./amb$newversion-Linux.zip
+            rm -r ./amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux ./amb
 
-        ;;
-    [tT])
-        #動作テスト用
-        curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
-        mv ./amb$newversion-Linux.zip  ../amb$newversion-Linux.zip
-        cd ../
-        rm -r ./amb
-        unzip ./amb$newversion-Linux.zip
-        rm -r ./amb$newversion-Linux.zip
-        mv ./amb$newversion-Linux ./amb
+            ;;
+        [tT])
+            #動作テスト用
+            curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+            cd ../
+            rm -r ./amb
+            unzip ./amb$newversion-Linux.zip
+            rm -r ./amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux ./amb
 
-        ;;
-    [nN]) echo "ファイルが存在しません!" 
-    echo
+            ;;
+        [nN])
+            echo "ファイルが存在しません!"
+            ;;
+        esac
+    fi
     ;;
-    esac
-fi
-;;
 start)
     echo "SYSTEMFILEが存在するか確認しています..."
     echo "ファイルを確認中 1/2"
@@ -347,60 +347,60 @@ cleanconfig)
     read -p musicbotstart
     case "$musicbotstart" in
     [start])
-    echo "SYSTEMFILEが存在するか確認しています..."
-    echo "ファイルを確認中 1/2"
-    if [ -e $SYSTEMFILE ]; then
-        echo "ファイルが存在します"
-        echo "ファイルを確認中 2/2"
-        if [ -e $SYSTEMFILEMUSIC ]; then
-            echo "ファイルが存在します"
-            echo "SYSTEMを開始します"
-            systemstart
-        else
-            echo "ファイルが不足しています。"
-            echo "ファイルを作成します"
-            mkdir "discord/music/"
-            echo "SYSTEMを開始します"
-            systemstart
-        fi
-    else
-        echo "SYSTEMFILEが欠落しています"
-        mkdir "discord"
-        echo "ファイルを作成しました"
-        echo "ファイルを確認中 2/2"
-        if [ -e $SYSTEMFILEMUSIC ]; then
-            echo "ファイルが存在します"
-            echo "SYSTEMを開始します"
-            systemstart
-        else
-            echo "ファイルが不足しています。"
-            echo "ファイルを作成します"
-            mkdir "discord/music/"
-            echo "SYSTEMを開始します"
-            systemstart
-        fi
+        echo "SYSTEMFILEが存在するか確認しています..."
+        echo "ファイルを確認中 1/2"
         if [ -e $SYSTEMFILE ]; then
             echo "ファイルが存在します"
-            echo "SYSTEMを開始します"
-            systemstart
             echo "ファイルを確認中 2/2"
             if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイル"
+                echo "ファイルが存在します"
+                echo "SYSTEMを開始します"
+                systemstart
             else
-                echo "test"
+                echo "ファイルが不足しています。"
+                echo "ファイルを作成します"
+                mkdir "discord/music/"
+                echo "SYSTEMを開始します"
+                systemstart
+            fi
+        else
+            echo "SYSTEMFILEが欠落しています"
+            mkdir "discord"
+            echo "ファイルを作成しました"
+            echo "ファイルを確認中 2/2"
+            if [ -e $SYSTEMFILEMUSIC ]; then
+                echo "ファイルが存在します"
+                echo "SYSTEMを開始します"
+                systemstart
+            else
+                echo "ファイルが不足しています。"
+                echo "ファイルを作成します"
+                mkdir "discord/music/"
+                echo "SYSTEMを開始します"
+                systemstart
+            fi
+            if [ -e $SYSTEMFILE ]; then
+                echo "ファイルが存在します"
+                echo "SYSTEMを開始します"
+                systemstart
+                echo "ファイルを確認中 2/2"
+                if [ -e $SYSTEMFILEMUSIC ]; then
+                    echo "ファイル"
+                else
+                    echo "test"
+                fi
             fi
         fi
-    fi
         ;;
-    [nN]) 
-    exit
-    ;;
+    [nN])
+        exit
+        ;;
 
-    [exit]) 
-    exit
-    ;;
-    \
-        *) ;;
+    [exit])
+        exit
+        ;;
+
+    *) ;;
     esac
     ;;
 esac
