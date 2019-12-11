@@ -174,11 +174,11 @@ start)
         echo "開発者モードで起動します"
         echo "ログが大量に流れるためキャンセルする場合 Ctrl + c を押してください"
         echo "3秒後に実行します"
-        echo "残り3秒"
+        echo "remaining time 3..."
         sleep 1
-        echo "残り2秒"
+        echo "remaining time 2..."
         sleep 1
-        echo "残り1秒"
+        echo "remaining time 1..."
         sleep 1
         echo "MusicBot Starting!"
         cd $FILE
