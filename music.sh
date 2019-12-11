@@ -94,11 +94,22 @@ vercheck)
     read -p "$最新のデータをダウンロードしますか?" Newversiondata
     case "$Newversiondata" in
     [yY])
-        #sudo wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-Linux.zip
+        #本番用
         wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
         mv ./amb$newversion-Linux.zip  ../amb$newversion-Linux.zip
-        rm -r ../amb
-        unzip ../amb$newversion-Linux.zip
+        cd ../
+        rm -r ./amb
+        unzip ./amb$newversion-Linux.zip
+        mv ./amb$newversion-Linux ./amb
+
+        ;;
+    [test])
+        #動作テスト用
+        curl -OL https://akari.fiid.net/app/releases/download/amb$newversion-Linux.zip
+        mv ./amb$newversion-Linux.zip  ../amb$newversion-Linux.zip
+        cd ../
+        rm -r ./amb
+        unzip ./amb$newversion-Linux.zip
         mv ./amb$newversion-Linux ./amb
 
         ;;
