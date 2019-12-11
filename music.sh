@@ -100,6 +100,7 @@ vercheck)
         cd ../
         rm -r ./amb
         unzip ./amb$newversion-Linux.zip
+        rm -r ./amb$newversion-Linux.zip
         mv ./amb$newversion-Linux ./amb
 
         ;;
