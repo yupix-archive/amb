@@ -1,0 +1,54 @@
+#------------------------------------------------------------------------------#
+#Messeage
+BOTSTART="Music Bot is starting!!"
+ENDSERVICE="サービスを終了します..."
+FILEDELETE="ファイルを削除しました"
+SERVICECHECK="サービスが終了したか確認しています"
+SERVICEALIVE="サービスは終了していません、終了しますか?"
+SERVICEDEAD="サービスの終了を確認しました"
+
+#file messeage
+FILEDELETED="Do you want to delete the file? (y/n):"
+FILETRUE="ファイルが存在します"
+FILEFALSE="ファイルが存在しません"
+JARFALSE="JARファイルが存在しません"
+FILEDOWNLOAD="ファイルをダウンロードしますか? (y/n):"
+FILEDOWNLOADNOW="ファイルをダウンロードしています"
+
+#help messeage
+commandhelp="コマンド | 使い方"
+maincommand="メインコマンド~~"
+startcommand="start: musicBotをスタートします。"
+startdev="start -d: MusicBot実行時のログをコンソールに出力します"
+removecommand="remove: MusicBot本体を削除します"
+commandhelpbot="Botコマンド~~"
+tokencommand="token: 現在使用しているTokenを表示します"
+settokencommand="settoken: Tokenを設定します"
+prefixcommand="prefix: 現在使用しているprefixを表示します"
+statuscommand="status: MusicBotのステータスを表示します"
+configcommand="CONFIG関係~~"
+cccommand="createconfig: Token等の必要データをまとめたファイルを生成します"
+reconfigcommand="reconfig: createconfigで生成したファイルを再生成します"
+cleanCcommand="cleanconfig: createconfigで生成したファイルを削除します"
+
+#help messeage
+#commandhelp
+#maincommand
+#startcommand
+#startdev
+#removecommand
+#commandhelpbot
+#tokencommand
+#settokencommand
+#prefixcommand
+#statuscommand
+#configcommand
+#configcommand
+#cccommand
+#reconfigcommand
+#cleanCcommand
+#------------------------------------------------------------------------------#
+#old settings
+#JAR="/home/$USER/デスクトップ/disocrd/musicbot/JMusicBot-$VERSION-$EDITION.jar"
+#FILE="/home/$USER/デスクトップ/disocrd/musicbot/"
+#------------------------------------------------------------------------------#
