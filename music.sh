@@ -95,11 +95,11 @@ vercheck)
     case "$Newversiondata" in
     [yY])
         #sudo wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-Linux.zip
-        sudo wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
+        wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
         mv ./amb$newversion-Linux.zip  ../amb$newversion-Linux.zip
         rm -r ../amb
         unzip ../amb$newversion-Linux.zip
-        mv ./amb$newversion-Linux ./amb/
+        mv ./amb$newversion-Linux ./amb
 
         ;;
     [nN]) echo "ファイルが存在しません!" 
