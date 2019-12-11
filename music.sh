@@ -180,7 +180,7 @@ start)
         sleep 1
         echo "残り1秒"
         sleep 1
-        echo "STARTING!!"
+        echo "MusicBot Starting!"
         cd $FILE
         $STARTPLUS
         echo "$SERVICECHECK"
