@@ -103,13 +103,14 @@ vercheck)
         mv ./amb$newversion-Linux ./amb
 
         ;;
-    [test])
+    [tT])
         #動作テスト用
-        curl -OL https://akari.fiid.net/app/releases/download/amb$newversion-Linux.zip
+        curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
         mv ./amb$newversion-Linux.zip  ../amb$newversion-Linux.zip
         cd ../
         rm -r ./amb
         unzip ./amb$newversion-Linux.zip
+        rm -r ./amb$newversion-Linux.zip
         mv ./amb$newversion-Linux ./amb
 
         ;;
