@@ -276,6 +276,7 @@ cleanconfig)
         echo "ファイル有無を確認しています"
         if [ -e ./assets/outdate.txt ]; then
             echo "ファイルが存在しない、又は削除に失敗しました"
+            sed -e 's/変更前の文字列/変更後の文字列/g' ./data.txt >./data-new.txt
         else
             echo "ファイルの削除に成功しました"
         fi
@@ -289,6 +290,29 @@ cleanconfig)
 settings)
     echo "Botを起動する際にアップデートを確認する"
     echo "現在の設定: $setting_VersionCheck"
+    ;;
+setsettings)
+    echo "どの設定を変更しますか?"
+    echo "1.Botを起動する際にアップデートを確認する"
+    echo "変更したい設定の番号を入力してください..."
+    read setsettings
+    case "$setsettings" in
+    [1])
+        echo "ファイル有無を確認しています"
+        if [ -e ./assets/settings.txt ]; then
+            echo "使用可能: yes/no"
+            read updatecheck
+            if [ $updatecheck = $setting_VersionCheck ]; then
+                echo "既に設定は "$setting_VersionCheck" に選択されています"
+            else
+                sed -i -e 's/setting_VersionCheck="yes"/setting_VersionCheck="no"/' ./assets/settings.txt
+            fi
+        else
+            echo "settingsファイルが存在しません..."
+            echo "exit 1"
+        fi
+        ;;
+    esac
     ;;
 
 #動作しません。
