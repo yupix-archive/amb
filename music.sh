@@ -5,6 +5,7 @@
 . ./assets/language/ja.txt
 . ./assets/commands.txt
 . ./assets/variable.txt
+. ./assets/settings.txt
 . ./newversion.txt
 . ./version.txt
 #------------------------------------------------------------------------------#
@@ -284,6 +285,10 @@ cleanconfig)
     \
         *) ;;
     esac
+    ;;
+settings)
+    echo "Botを起動する際にアップデートを確認する"
+    echo "現在の設定: $setting_VersionCheck"
     ;;
 
 #動作しません。

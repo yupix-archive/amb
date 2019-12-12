@@ -1,0 +1,3 @@
+#Botを起動する度に、アップデートをチェックするか否か
+#defaultがYes(確認する)確認しない場合はNo(確認しない)
+setting_VersionCheck="yes"
