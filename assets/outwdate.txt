@@ -1,6 +1,6 @@
 # BEGIN
-token_=" NDI0NzU4ODY2MTY1ODkxMDcy.XeGN-Q.dv2VbGYZQs0eMphBUPFLMvZGj9M"
-owner_=" 315809057032110103"
+token_=" YourToken"
+owner_=" owner ID"
 prefix_=" "@mention""
 game_=" "DEFAULT""
 status_=" ONLINE"
