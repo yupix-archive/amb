@@ -265,7 +265,41 @@ createconfig)
     fi
     ;;
 reconfig)
-    $main
+    rm -r ./assets/outdate.txt
+    sleep 1
+    echo "ファイルを削除しています..."
+    echo "ファイルが削除できているか確認しています..."
+    if [ -e $outputdata ]; then
+        echo "ファイル削除を確認しました..."
+        echo "ファイルの生成を開始します..."
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+
+    else
+
+        echo "ファイルが削除できていません"
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+    fi
+    if [ -e ./assets/outdate.txt ]; then
+        echo "ファイルの生成に成功しました"
+    else
+        echo "ファイルの生成に失敗しました"
+        read -p "再試行しますか? (y/n)" RETRY
+        case "$RETRY" in
+        [yY])
+            cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+            if [ -e ./assets/outdate.txt ]; then
+                echo "ファイルの生成に成功しました"
+            else
+                echo "ファイルの削除に失敗しました。"
+                echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
+                echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
+            fi
+            ;;
+        [nN])
+            echo "サービスを終了します"
+            ;;
+        esac
+    fi
     ;;
 cleanconfig)
     read -p "$FILEDELETED "
@@ -283,8 +317,7 @@ cleanconfig)
         ;;
     [nN]) ;;
 
-    \
-        *) ;;
+    *) ;;
     esac
     ;;
 settings)
