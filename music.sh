@@ -29,13 +29,12 @@ main() {
     echo "ファイルを削除しています..."
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
-        echo "ファイル削除を確認しました..."
-        echo "ファイルの生成を開始します..."
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+        echo "ファイルが削除できていません"
 
     else
-
-        echo "ファイルが削除できていません"
+        echo "ファイルの削除を確認しました..."
+        echo "ファイルの生成を開始します..."
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     fi
     if [ -e ./assets/outdate.txt ]; then
         echo "ファイルの生成に成功しました"
@@ -308,6 +307,7 @@ status)
     ;;
 createconfig)
     if [ -e $target ]; then
+        sed -i 's/"//g' $CONFIGFILE
         main
     else
         echo "ファイルが存在しません"
@@ -351,15 +351,14 @@ reconfig)
     fi
     ;;
 cleanconfig)
-    read -p "$FILEDELETED "
+    read -p "$FILEDELETED" CLEANCONFI
     case "$CLEANCONFI" in
     [yY])
         echo "ファイルの削除を開始します"
         $CLEANCONFIG
-        echo "ファイル有無を確認しています"
+        echo "ファイルの有無を確認しています"
         if [ -e ./assets/outdate.txt ]; then
             echo "ファイルが存在しない、又は削除に失敗しました"
-            sed -e 's/変更前の文字列/変更後の文字列/g' ./data.txt >./data-new.txt
         else
             echo "ファイルの削除に成功しました"
         fi
@@ -443,14 +442,15 @@ setSettings)
 #    fi
 #    ;;
 *)
-    echo -e "\033[1;37m##=======================================##\033[0;39m"
-    echo "##███╗   ███╗██╗   ██╗███████╗██╗ ██████╗##"
-    echo "##████╗ ████║██║   ██║██╔════╝██║██╔════╝##"
-    echo "##██╔████╔██║██║   ██║███████╗██║██║     ##"
-    echo "##██║╚██╔╝██║██║   ██║╚════██║██║██║     ##"
-    echo "##██║ ╚═╝ ██║╚██████╔╝███████║██║╚██████╗##"
-    echo "##╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝##"
-    echo -e "\033[1;37m##=======================================##\033[0;39m"
+
+    echo  -e "\033[1;37m##===========================##\033[0;39m"
+    echo "## █████╗ ███╗   ███╗██████╗ ##"
+    echo "##██╔══██╗████╗ ████║██╔══██╗##"
+    echo "##███████║██╔████╔██║██████╔╝##"
+    echo "##██╔══██║██║╚██╔╝██║██╔══██╗##"
+    echo "##██║  ██║██║ ╚═╝ ██║██████╔╝##"
+    echo "##╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝ ##"
+    echo  -e "\033[1;37m##===========================##\033[0;39m"
     echo -e "\033[0;31mstart\033[1;39m: BOTを起動します"
     echo -e "\033[0;31mremove\033[1;39m: jarファイルを削除します"
     echo -e "\033[0;31mRECONFIG\033[1;39m: 出力ファイルを再生成します"
