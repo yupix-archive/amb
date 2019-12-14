@@ -331,7 +331,7 @@ settings)
     echo "Botを起動する際にアップデートを確認する"
     echo "現在の設定: $setting_VersionCheck"
     ;;
-setsettings)
+setSettings)
     echo "どの設定を変更しますか?"
     echo "1.Botを起動する際にアップデートを確認する"
     echo "変更したい設定の番号を入力してください..."
