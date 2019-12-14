@@ -74,9 +74,57 @@ versioncheck() {
 
             ;;
         [nN])
-            echo "ファイルが存在しません!"
+            echo "アップデートをキャンセルしました"
+            echo "MusicBotを起動します..."
+            botstart
             ;;
         esac
+    fi
+}
+botstart() {
+    echo "SYSTEMFILEが存在するか確認しています..."
+    echo "ファイルを確認中 1/2"
+    if [ -e $SYSTEMFILE ]; then
+        echo "ファイルが存在します"
+        echo "ファイルを確認中 2/2"
+        if [ -e $SYSTEMFILEMUSIC ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+        else
+            echo "ファイルが不足しています。"
+            echo "ファイルを作成します"
+            mkdir "discord/music/"
+            echo "SYSTEMを開始します"
+            systemstart
+        fi
+    else
+        echo "SYSTEMFILEが欠落しています"
+        mkdir "discord"
+        echo "ファイルを作成しました"
+        echo "ファイルを確認中 2/2"
+        if [ -e $SYSTEMFILEMUSIC ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+        else
+            echo "ファイルが不足しています。"
+            echo "ファイルを作成します"
+            mkdir "discord/music/"
+            echo "SYSTEMを開始します"
+            systemstartVersion
+        fi
+        if [ -e $SYSTEMFILE ]; then
+            echo "ファイルが存在します"
+            echo "SYSTEMを開始します"
+            systemstart
+            echo "ファイルを確認中 2/2"
+            if [ -e $SYSTEMFILEMUSIC ]; then
+                echo "ファイル"
+            else
+                echo "test"
+            fi
+        fi
     fi
 }
 systemstart() {
@@ -129,50 +177,7 @@ start)
     if [ yes = $setting_VersionCheck ]; then
         versioncheck
     else
-        echo "SYSTEMFILEが存在するか確認しています..."
-        echo "ファイルを確認中 1/2"
-        if [ -e $SYSTEMFILE ]; then
-            echo "ファイルが存在します"
-            echo "ファイルを確認中 2/2"
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイルが存在します"
-                echo "SYSTEMを開始します"
-                systemstart
-            else
-                echo "ファイルが不足しています。"
-                echo "ファイルを作成します"
-                mkdir "discord/music/"
-                echo "SYSTEMを開始します"
-                systemstart
-            fi
-        else
-            echo "SYSTEMFILEが欠落しています"
-            mkdir "discord"
-            echo "ファイルを作成しました"
-            echo "ファイルを確認中 2/2"
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイルが存在します"
-                echo "SYSTEMを開始します"
-                systemstart
-            else
-                echo "ファイルが不足しています。"
-                echo "ファイルを作成します"
-                mkdir "discord/music/"
-                echo "SYSTEMを開始します"
-                systemstartVersion
-            fi
-            if [ -e $SYSTEMFILE ]; then
-                echo "ファイルが存在します"
-                echo "SYSTEMを開始します"
-                systemstart
-                echo "ファイルを確認中 2/2"
-                if [ -e $SYSTEMFILEMUSIC ]; then
-                    echo "ファイル"
-                else
-                    echo "test"
-                fi
-            fi
-        fi
+        botstart
     fi
     ;;
 "start -d")
@@ -205,7 +210,7 @@ start)
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            sudo wget https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+            wget https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
             mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
             $STARTPLUS
@@ -229,7 +234,7 @@ remove)
     case "$DATA" in
     [yY])
         if [ -e $JAR ]; then
-            sudo rm $JAR
+            rm $JAR
             echo "ファイルを削除しました"
             exit
         else
@@ -381,7 +386,7 @@ setSettings)
 #        read -p "$FILEDOWNLOAD " DATA
 #        case "$DATA" in
 #        [yY])
-#            sudo wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+#            wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
 #           mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
 #           cd $FILE
 #           java -jar JMusicBot-$VERSION-$EDITION.jar
