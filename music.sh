@@ -338,7 +338,7 @@ setsettings)
             if [ $updatecheck = $setting_VersionCheck ]; then
                 echo "既に設定は "$setting_VersionCheck" に選択されています"
             else
-                sed -i -e 's/setting_VersionCheck="yes"/setting_VersionCheck="no"/' ./assets/settings.txt
+                sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
             fi
         else
             echo "settingsファイルが存在しません..."
