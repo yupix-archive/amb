@@ -43,6 +43,43 @@ main() {
         echo "ファイルの生成に失敗しました"
     fi
 }
+vcheck() {
+    #新しいバージョン
+    curl -sl https://akari.fiid.net/app/amb/version.txt >newversion.txt
+    if [ $version = $newversion ]; then
+        echo '現在のambは最新バージョンで実行中です'
+    else
+        read -p "$最新のデータをダウンロードしますか?" Newversiondata
+        case "$Newversiondata" in
+        [yY])
+            #本番用
+            wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+            cd ../
+            rm -r ./amb
+            unzip ./amb$newversion-Linux.zip
+            rm -r ./amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux ./amb
+
+            ;;
+        [tT])
+            #動作テスト用
+            curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+            cd ../
+            rm -r ./amb
+            unzip ./amb$newversion-Linux.zip
+            rm -r ./amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux ./amb
+
+            ;;
+        [nN])
+            echo "アップデートをキャンセルしました"
+            echo "MusicBotを起動します..."
+            ;;
+        esac
+    fi
+}
 versioncheck() {
     #新しいバージョン
     curl -sl https://akari.fiid.net/app/amb/version.txt >newversion.txt
@@ -171,7 +208,7 @@ systemstart() {
 #------------------------------------------------------------------------------#
 case $1 in
 vercheck)
-    versioncheck
+    vcheck
     ;;
 start)
     if [ yes = $setting_VersionCheck ]; then
