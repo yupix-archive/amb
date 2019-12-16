@@ -1,2 +1,5 @@
 #botを起動する際にVercheckを走らせるかどうか
-setting_VersionCheck="yes"
+setting_VersionCheck="no"
+
+#
+setting_botinvite="yes"

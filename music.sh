@@ -291,15 +291,13 @@ token)
     echo -e "$TOKEN " | sed 's/token\ =\ //g'
     echo "です。変更する場合はSETTOKENをお使いください"
     ;;
-settoken)
+setoken)
     echo "・TOKENを入力してください"
     read SETTOKEN
     sed -i -e "s/$TOKEN/token = $SETTOKEN/g" $FILE/config.txt
     ;;
 prefix)
-    echo -e "PREFIX"
-    echo -e "$PREFIX " | sed 's/token\ =\ //g' | sed 's/ltprefix\ =\ "NONE"//g'
-    echo "です。変更する場合はSETPREFIXをお使いください"
+    echo -e "$prefix_ です。変更する場合はSETPREFIXをお使いください"
     ;;
 status)
     echo -e "現在のステータスは $status_ です。変更する場合はsetstatusをご使用ください"
@@ -322,9 +320,7 @@ reconfig)
         echo "ファイル削除を確認しました..."
         echo "ファイルの生成を開始します..."
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
-
     else
-
         echo "ファイルが削除できていません"
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     fi
@@ -368,9 +364,13 @@ cleanconfig)
     *) ;;
     esac
     ;;
+
+
 settings)
     echo "Botを起動する際にアップデートを確認する"
     echo "現在の設定: $setting_VersionCheck"
+    echo "起動した際にBOTの招待URLを表示する"
+    echo "現在の設定: $setting_botinvite"
     ;;
 setSettings)
     echo "どの設定を変更しますか?"
@@ -443,14 +443,14 @@ setSettings)
 #    ;;
 *)
 
-    echo  -e "\033[1;37m##===========================##\033[0;39m"
+    echo -e "\033[1;37m##===========================##\033[0;39m"
     echo "## █████╗ ███╗   ███╗██████╗ ##"
     echo "##██╔══██╗████╗ ████║██╔══██╗##"
     echo "##███████║██╔████╔██║██████╔╝##"
     echo "##██╔══██║██║╚██╔╝██║██╔══██╗##"
     echo "##██║  ██║██║ ╚═╝ ██║██████╔╝##"
     echo "##╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝ ##"
-    echo  -e "\033[1;37m##===========================##\033[0;39m"
+    echo -e "\033[1;37m##===========================##\033[0;39m"
     echo -e "\033[0;31mstart\033[1;39m: BOTを起動します"
     echo -e "\033[0;31mremove\033[1;39m: jarファイルを削除します"
     echo -e "\033[0;31mRECONFIG\033[1;39m: 出力ファイルを再生成します"
