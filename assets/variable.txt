@@ -1,19 +1,20 @@
 #------------------------------------------------------------------------------#
+
+#コマンド関連
+VERSION="0.2.6"
+EDITION="Linux"
+ProcessName="JMusicBot-$VERSION-$EDITION.jar"
+
 #SYSTEM関連
 SCREEN_NAME=test
 USER=$(whoami)
 
 #ファイル関連
 FILE="./discord/music/"
-JAR="./discord/music/$ProcessName"
+JAR="./discord/music/JMusicBot-$VERSION-$EDITION.jar"
 SYSTEMFILEMUSIC="./discord/music"
 SYSTEMFILE="discord"
 SYSTEMFILE="discord"
 SYSTEMMV="./discrod/musicbot/"
 CONFIGFILE="./discord/music/config.txt"
-
-#コマンド関連
-VERSION="0.2.6"
-EDITION="Linux"
-ProcessName="JMusicBot-$VERSION-$EDITION.jar"
 #------------------------------------------------------------------------------#

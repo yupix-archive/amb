@@ -148,7 +148,7 @@ botstart() {
             echo "ファイルを作成します"
             mkdir "discord/music/"
             echo "SYSTEMを開始します"
-            systemstartVersion
+            systemstart
         fi
         if [ -e $SYSTEMFILE ]; then
             echo "ファイルが存在します"
@@ -165,6 +165,7 @@ botstart() {
 }
 systemstart() {
     if [ -e $JAR ]; then
+        echo "jarファイルにchmodで権限を付与します"
         sudo chmod u+x $JAR
         echo "$FILETRUE"
         echo "$BOTSTART"
