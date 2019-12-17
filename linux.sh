@@ -211,6 +211,14 @@ vercheck)
     vcheck
     ;;
 start)
+    if [ -z "$CLIENT_ID" ]; then
+        echo "CLIENT_IDを入力してください"
+        read INPUT_CLIENTID
+        sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
+        echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
+    else
+        echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
+    fi
     if [ yes = $setting_VersionCheck ]; then
         versioncheck
     else
@@ -284,6 +292,30 @@ remove)
     ;;
 #===========#
 #Config設定用#
+#===========#
+#ClientID   #
+#===========#
+
+clientid)
+    echo "現在のCLIENT_IDは $CLIENT_ID に設定されています。"
+    echo -e "変更する場合は \033[0;31msetclientid\033[0;39m をお使いください"
+;;
+
+setclientid)
+    echo "CLIENT_IDを入力してください"
+    read INPUT_CLIENTID
+    sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
+    echo -e "CLIENT_IDを \033[0;31m$INPUT_CLIENTID\033[0;39m に変更しました"
+;;
+
+#===========#
+#InviteBOT  #
+#===========#
+
+invite)
+    echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
+    ;;
+
 #===========#
 #Token関係　 #
 #===========#
@@ -365,7 +397,6 @@ cleanconfig)
     *) ;;
     esac
     ;;
-
 
 settings)
     echo "Botを起動する際にアップデートを確認する"
