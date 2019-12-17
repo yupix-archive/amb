@@ -216,14 +216,28 @@ start)
         read INPUT_CLIENTID
         sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
         echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
+        if [ yes = $setting_VersionCheck ]; then
+            versioncheck
+        else
+            botstart
+        fi
     else
-        echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
+        if [ yes = $setting_botinvite ]; then
+            echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
+            if [ yes = $setting_VersionCheck ]; then
+                versioncheck
+            else
+                botstart
+            fi
+        else
+            if [ yes = $setting_VersionCheck ]; then
+                versioncheck
+            else
+                botstart
+            fi
+        fi
     fi
-    if [ yes = $setting_VersionCheck ]; then
-        versioncheck
-    else
-        botstart
-    fi
+
     ;;
 "start -d")
     if [ -e $JAR ]; then
@@ -299,14 +313,14 @@ remove)
 clientid)
     echo "現在のCLIENT_IDは $CLIENT_ID に設定されています。"
     echo -e "変更する場合は \033[0;31msetclientid\033[0;39m をお使いください"
-;;
+    ;;
 
 setclientid)
     echo "CLIENT_IDを入力してください"
     read INPUT_CLIENTID
     sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
     echo -e "CLIENT_IDを \033[0;31m$INPUT_CLIENTID\033[0;39m に変更しました"
-;;
+    ;;
 
 #===========#
 #InviteBOT  #
@@ -406,12 +420,13 @@ settings)
     ;;
 setSettings)
     echo "どの設定を変更しますか?"
-    echo "1.Botを起動する際にアップデートを確認する"
+    echo "1.Botを起動した際にアップデートを確認する"
+    echo "2.Botを起動した際にBOTの招待リンクを表示する"
     echo "変更したい設定の番号を入力してください..."
     read setsettings
     case "$setsettings" in
     [1])
-        echo "ファイル有無を確認しています"
+        echo "SettingsFileの有無を確認しています"
         if [ -e ./assets/settings.txt ]; then
             echo "使用可能: yes/no"
             read updatecheck
@@ -421,7 +436,22 @@ setSettings)
                 sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
             fi
         else
-            echo "settingsファイルが存在しません..."
+            echo "SettingsFileが存在しません..."
+            echo "exit 1"
+        fi
+        ;;
+    [2])
+        echo "SettingsFileの有無を確認しています"
+        if [ -e ./assets/settings.txt ]; then
+            echo "使用可能: yes/no"
+            read settingCLIENTID
+            if [ $settingCLIENTID = $setting_botinvite ]; then
+                echo "既に設定は "$setting_botinvite" に選択されています"
+            else
+                sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$settingCLIENTID'"/' ./assets/settings.txt
+            fi
+        else
+            echo "SettingsFileが存在しません..."
             echo "exit 1"
         fi
         ;;
