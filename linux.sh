@@ -18,10 +18,21 @@ SELF_DIR_PATH=$(
 )/
 OUTDATE="$SELF_DIR_PATH/assets/"
 #------------------------------------------------------------------------------#
-#現在の情報
-#・Prefixの表示時に関係ないのが出る
-#・SetPrefixの際にエラーが発生する
+#██╗    ██╗ █████╗ ██████╗ ███╗   ██╗██╗███╗   ██╗ ██████╗
+#██║    ██║██╔══██╗██╔══██╗████╗  ██║██║████╗  ██║██╔════╝
+#██║ █╗ ██║███████║██████╔╝██╔██╗ ██║██║██╔██╗ ██║██║  ███╗
+#██║███╗██║██╔══██║██╔══██╗██║╚██╗██║██║██║╚██╗██║██║   ██║
+#╚███╔███╔╝██║  ██║██║  ██║██║ ╚████║██║██║ ╚████║╚██████╔╝
+# ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+#このファイルを変更するにはShellScriptに詳しい方を知り合いにお持ちか、
+#又はある程度の知識があることを前提に変更することをとても強く推奨します。
+#本ファイルはMAIN SYSTEM そのもののため、どこかが欠けたりすると
+#ほぼ確実に全ての機能が正常に動作しなくなります。
+#本Projectの内容を変更する際は以下の本Projectの作者であるyupixが
+#解説しているサイトを読みながらすることを推奨します。
+# https://akari.fiid.net/dev/amb/top
 #------------------------------------------------------------------------------#
+
 #コマンド
 main() {
     rm -r ./assets/outdate.txt
@@ -170,16 +181,26 @@ systemstart() {
         echo "$FILETRUE"
         echo "$BOTSTART"
         cd $FILE
-        java -jar JMusicBot-$VERSION-$EDITION.jar
-        echo "$SERVICECHECK"
-        count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-        if [ $count = 0 ]; then
-            echo "$SERVICEDEAD"
-        else
-            echo "$SERVICEALIVE"
-        fi
-        echo "$ENDSERVICE"
-        exit
+        java -jar JMusicBot-$VERSION-$EDITION.jar &
+        echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
+        read -p "e でSystemを終了します" SERVICEEXIT
+        sleep 1
+        case "$SERVICEEXIT" in
+        [e])
+            pid=$!
+            kill $pid
+            echo "$SERVICECHECK"
+            sleep 2
+            count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+            if [ $count = 0 ]; then
+                echo "$SERVICEDEAD"
+            else
+                echo "$SERVICEALIVE"
+            fi
+            echo "$ENDSERVICE"
+            exit
+            ;;
+        esac
     else
         echo "$JARFALSE"
         read -p "$FILEDOWNLOAD " DATA
@@ -189,16 +210,21 @@ systemstart() {
             wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
             mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
-            java -jar JMusicBot-$VERSION-$EDITION.jar
-            echo "$SERVICECHECK"
-            count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-            if [ $count = 0 ]; then
-                echo "$SERVICEDEAD"
-            else
-                echo "$SERVICEALIVE"
-            fi
-            echo "$ENDSERVICE"
-            exit
+            java -jar JMusicBot-$VERSION-$EDITION.jar &
+            read -p "テスト" SERVICEEXIT
+            case "$SERVICEEXIT" in
+            [yY])
+                echo "$SERVICECHECK"
+                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+                if [ $count = 0 ]; then
+                    echo "$SERVICEDEAD"
+                else
+                    echo "$SERVICEALIVE"
+                fi
+                echo "$ENDSERVICE"
+                exit
+                ;;
+            esac
             ;;
         [nN]) echo "$ENDSERVICE" ;;
         *) ;;
@@ -287,6 +313,13 @@ start)
         *) ;;
         esac
     fi
+    ;;
+time)
+    echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
+    while true; do
+        echo -e "$(date +%H:%M:%S)\r\c"
+        sleep 1
+    done
     ;;
 remove)
     read -p "$FILEDELETED" DATA

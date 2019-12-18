@@ -1,7 +1,7 @@
-#BOTを起動した際にVercheckを走らせるかどうか
-setting_VersionCheck="no"
+#BOTを起動した際にVercheckを走らせるかどうか (default = yes)
+setting_VersionCheck="yes"
 
-#BOTを起動した際に招待リンクを表示するかどうか
+#BOTを起動した際に招待リンクを表示するかどうか (default = yes)
 setting_botinvite="yes"
 
 #CLIENT_ID
