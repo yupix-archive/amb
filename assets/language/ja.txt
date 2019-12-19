@@ -6,6 +6,12 @@ FILEDELETE="ファイルを削除しました"
 SERVICECHECK="サービスが終了したか確認しています"
 SERVICEALIVE="サービスは終了していません、終了しますか?"
 SERVICEDEAD="サービスの終了を確認しました"
+STARTDEVELOPERMODE="開発者モードで起動します"
+DEVELOPERMODEWARNING="開発者モードは仕様の都合上旧コードをそのまま流用しています。\そのため、startコマンドとは仕様が違います。"
+remainingtimeone="残り1秒"
+remainingtimetwo="残り2秒"
+remainingtimethree="残り3秒"
+
 
 #ファイル関係メッセージ
 FILEDELETED="ファイルを削除しますか? (y/n):"

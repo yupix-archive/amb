@@ -265,18 +265,19 @@ start)
     fi
 
     ;;
-"start -d")
+"start-d")
     if [ -e $JAR ]; then
         echo "$FILETRUE"
         echo "$BOTSTART"
-        echo "開発者モードで起動します"
+        echo "$STARTDEVELOPERMODE"
+        echo -e "$DEVELOPERMODEWARNING"
         echo "ログが大量に流れるためキャンセルする場合 Ctrl + c を押してください"
         echo "3秒後に実行します"
-        echo "remaining time 3..."
+        echo "$remainingtimethree"
         sleep 1
-        echo "remaining time 2..."
+        echo "$remainingtimetwo"
         sleep 1
-        echo "remaining time 1..."
+        echo "$remainingtimeone"
         sleep 1
         echo "MusicBot Starting!"
         cd $FILE
@@ -327,13 +328,13 @@ remove)
     [yY])
         if [ -e $JAR ]; then
             rm $JAR
-            echo "ファイルを削除しました"
+            echo "$FILEDELETE"
             exit
         else
             echo "$FILEFALSE"
         fi
         ;;
-    [nN]) echo "ファイルが存在しません!" ;;
+    [nN]) echo "$FILEFALSE" ;;
     *) ;;
     esac
     ;;

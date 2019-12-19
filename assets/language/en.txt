@@ -6,6 +6,7 @@ FILEDELETE="ファイルを削除しました"
 SERVICECHECK="サービスが終了したか確認しています"
 SERVICEALIVE="サービスは終了していません、終了しますか?"
 SERVICEDEAD="サービスの終了を確認しました"
+STARTDEVELOPERMODE="Start in developer mode"
 
 #file messeage
 FILEDELETED="Do you want to delete the file? (y/n):"
