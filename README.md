@@ -21,6 +21,12 @@ OS
 console
 - Bash
 
+## 使い方
+> 1.ZIPファイルをダウンロード
+> 2.ZIPを解凍
+> 3.linux.shに実行権限を付与する
+> 4../linux.sh vercheck で動作確認をする
+
 ## author
 - [MainSYSTEM / yupix](https://github.com/yupix/)
 - [SubSYSTEM / sousuke0422](https://github.com/sousuke0422/)
