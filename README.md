@@ -31,7 +31,7 @@ console
 
 ## サポート
 バグの発見または機能の追加に付きましては以下のページ等に報告していただけると助かります。
-Issuesは確認までに時間がかかる可能性が、多少有ります、即座の対応を
+Issuesは確認までに時間がかかると思われます、早めの対応を
 望む場合はDiscordへの参加を推奨します。
 - [Discord](https://discord.gg/uDNyePY)
 - [issues](https://github.com/yupix/amb/issues)

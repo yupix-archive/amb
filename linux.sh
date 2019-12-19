@@ -315,6 +315,14 @@ start)
         esac
     fi
     ;;
+botstatus)
+    count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+    if [ $count = 0 ]; then
+        echo -e "BOTSTATUS: \033[0;31mOFFLINE\033"
+    else
+        echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
+    fi
+    ;;
 time)
     echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
     while true; do
@@ -368,12 +376,11 @@ invite)
 #Token関係　 #
 #===========#
 token)
-    echo -e "TOKEN"
-    echo -e "$TOKEN " | sed 's/token\ =\ //g'
-    echo "です。変更する場合はSETTOKENをお使いください"
+    echo -e "現在のTokenは $token_  です。"
+    echo -e "変更する場合は \033[0;31msettoken\033[0;39m をお使いください"
     ;;
 setoken)
-    echo "・TOKENを入力してください"
+    echo "TOKENを入力してください"
     read SETTOKEN
     sed -i -e "s/$TOKEN/token = $SETTOKEN/g" $FILE/config.txt
     ;;
@@ -381,8 +388,8 @@ prefix)
     echo -e "$prefix_ です。変更する場合はSETPREFIXをお使いください"
     ;;
 status)
-    echo -e "現在のステータスは $status_ です。変更する場合はsetstatusをご使用ください"
-    echo "です。変更する場合はSETPREFIXをお使いください"
+    echo -e "現在のステータスは $status_ です。"
+    echo -e "変更する場合は \033[0;31msetstatus\033[0;39m をお使いください"
     ;;
 createconfig)
     if [ -e $target ]; then
