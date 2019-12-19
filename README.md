@@ -23,7 +23,7 @@ console
 
 ## author
 - [MainSYSTEM / yupix](https://github.com/yupix/)
-- [AWKSYSTEM / sousuke0422](https://github.com/sousuke0422/)
+- [SubSYSTEM / sousuke0422](https://github.com/sousuke0422/)
 
 ## SpecialThanks
 本Projectを作るきっかけとなった物です、この場で心より感謝申し上げます。
