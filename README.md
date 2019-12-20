@@ -34,7 +34,9 @@ Windowsで実行する際にwslにはubuntuを使うことを推奨します
 './linux.sh vercheck'
 
 ### Windows:
-<p class="alert">**警告** git for windows で入手する際の注意点</p>
+```diff
+- **警告** git for windows で入手する際の注意点
+```
 Git for Windows のインストール後、改行コードを自動で変更する設定が有効になっている
 可能性が高くCRLFに自動変換されてしまいます。
 改行コードがLFでないと正常に動作しないため、
