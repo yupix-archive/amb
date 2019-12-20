@@ -18,20 +18,25 @@ JMusicBotの作者様、その他の関係者様等の方々がいて
 
 ### OS
 - Ubuntu
+- Windows(WSL必須)
+Windowsで実行する際にwslにはubuntuを使うことを推奨します
 
-### KONSOLE
+### Shell
 - Bash
 
 ## 使い方
 ### Linux:
-1.ZIPファイルをダウンロード
-2.ZIPを解凍
-3.linux.shに実行権限を付与する
-4../linux.sh vercheck で動作確認をする
+1.projectをclone
+'git clone git@github.com:yupix/amb.git'
+2.linux.shに実行権限を付与する
+4.動作を確認する
+例:
+'./linux.sh vercheck'
 
-### Windows
-git cloneで入手する際の注意点
-gitの設定を変更
+### Windows:
+<p class="alert">**警告** git for windows で入手する際の注意点</p>
+Git for Windows のインストール後、改行コードを自動で変更する設定が有効になっている
+可能性が高くCRLFに自動変換されてしまいます。
 改行コードがLFでないと正常に動作しないため、
 以下のコマンドを必ず実行する必要が有ります
 > git config --global core.autoCRLF false
