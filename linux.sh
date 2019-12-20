@@ -53,6 +53,41 @@ main() {
         echo "ファイルの生成に失敗しました"
     fi
 }
+autoreconfig() {
+    rm -r ./assets/outdate.txt
+    sleep 1
+    echo "ファイルを削除しています..."
+    echo "ファイルが削除できているか確認しています..."
+    if [ -e $outputdata ]; then
+        echo "ファイル削除を確認しました..."
+        echo "ファイルの生成を開始します..."
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+    else
+        echo "ファイルが削除できていません"
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+    fi
+    if [ -e ./assets/outdate.txt ]; then
+        echo "ファイルの生成に成功しました"
+    else
+        echo "ファイルの生成に失敗しました"
+        read -p "再試行しますか? (y/n)" RETRY
+        case "$RETRY" in
+        [yY])
+            cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+            if [ -e ./assets/outdate.txt ]; then
+                echo "ファイルの生成に成功しました"
+            else
+                echo "ファイルの削除に失敗しました。"
+                echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
+                echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
+            fi
+            ;;
+        [nN])
+            echo "サービスを終了します"
+            ;;
+        esac
+    fi
+}
 vcheck() {
     #新しいバージョン
     curl -sl https://akari.fiid.net/app/amb/version.txt >newversion.txt
@@ -237,29 +272,43 @@ vercheck)
     vcheck
     ;;
 start)
-    if [ -z "$CLIENT_ID" ]; then
-        echo "CLIENT_IDを入力してください"
-        read INPUT_CLIENTID
-        sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
-        echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
-        if [ yes = $setting_VersionCheck ]; then
-            versioncheck
-        else
-            botstart
+    if [ yes = $setting_outputdata ]; then
+        autoreconfig
+        if [ -z "$CLIENT_ID" ]; then
+            echo "CLIENT_IDを入力してください"
+            read INPUT_CLIENTID
+            sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
+            echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
+            if [ yes = $setting_VersionCheck ]; then
+                versioncheck
+            else
+                botstart
+            fi
         fi
-    else
-        if [ yes = $setting_botinvite ]; then
-            echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
+        if [ -z "$CLIENT_ID" ]; then
+            echo "CLIENT_IDを入力してください"
+            read INPUT_CLIENTID
+            sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
+            echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
             if [ yes = $setting_VersionCheck ]; then
                 versioncheck
             else
                 botstart
             fi
         else
-            if [ yes = $setting_VersionCheck ]; then
-                versioncheck
+            if [ yes = $setting_botinvite ]; then
+                echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
+                if [ yes = $setting_VersionCheck ]; then
+                    versioncheck
+                else
+                    botstart
+                fi
             else
-                botstart
+                if [ yes = $setting_VersionCheck ]; then
+                    versioncheck
+                else
+                    botstart
+                fi
             fi
         fi
     fi
@@ -463,6 +512,7 @@ setSettings)
     echo "どの設定を変更しますか?"
     echo "1.Botを起動した際にアップデートを確認する"
     echo "2.Botを起動した際にBOTの招待リンクを表示する"
+    echo "3.Botを起動した際にTOKEN等の情報を更新する"
     echo "変更したい設定の番号を入力してください..."
     read setsettings
     case "$setsettings" in
@@ -475,6 +525,11 @@ setSettings)
                 echo "既に設定は "$setting_VersionCheck" に選択されています"
             else
                 sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
+                if [ $updatecheck = $setting_VersionCheck ]; then
+                    echo "変更に失敗しました..."
+                else
+                    echo "変更に成功しました!"
+                fi
             fi
         else
             echo "SettingsFileが存在しません..."
@@ -490,6 +545,31 @@ setSettings)
                 echo "既に設定は "$setting_botinvite" に選択されています"
             else
                 sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$settingCLIENTID'"/' ./assets/settings.txt
+                if [ $settingCLIENTID = $setting_botinvite ]; then
+                    echo "変更に失敗しました..."
+                else
+                    echo "変更に成功しました!"
+                fi
+            fi
+        else
+            echo "SettingsFileが存在しません..."
+            echo "exit 1"
+        fi
+        ;;
+    [3])
+        echo "SettingsFileの有無を確認しています"
+        if [ -e ./assets/settings.txt ]; then
+            echo "使用可能: yes/no"
+            read settingoutputin
+            if [ $settingoutputin = $setting_outputdata ]; then
+                echo "既に設定は "$setting_outputdata" に選択されています"
+            else
+                sed -i -e 's/setting_outputdata="'$setting_outputdata'"/setting_outputdata="'$settingoutputin'"/' ./assets/settings.txt
+                if [ $settingoutputin = $setting_outputdata ]; then
+                    echo "変更に失敗しました..."
+                else
+                    echo "変更に成功しました!"
+                fi
             fi
         else
             echo "SettingsFileが存在しません..."

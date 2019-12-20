@@ -27,9 +27,9 @@ Windowsで実行する際にwslにはubuntuを使うことを推奨します
 ## 使い方
 ### Linux:
 1.projectをclone
-'git clone git@github.com:yupix/amb.git'
-2.linux.shに実行権限を付与する
-4.動作を確認する
+'git clone git@github.com:yupix/amb.git'  
+2.linux.shに実行権限を付与する  
+3.動作を確認する  
 例:
 './linux.sh vercheck'
 

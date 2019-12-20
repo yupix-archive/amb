@@ -4,5 +4,8 @@ setting_VersionCheck="yes"
 #BOTを起動した際に招待リンクを表示するかどうか (default = yes)
 setting_botinvite="yes"
 
+#BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)
+setting_outputdata="yes"
+
 #CLIENT_ID
 CLIENT_ID=""
