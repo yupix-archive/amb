@@ -16,20 +16,20 @@ JMusicBotの作者様、その他の関係者様等の方々がいて
 本Projectの開発は以下の環境下で行われており、動作のサポート等は基本的に以下の物を優先します。
 今後その他console等にも対応する予定ですが、少々時間がかかると思われますので、宜しくおねがいします
 
-*OS*
+### OS
 - Ubuntu
 
-*KONSOLE*
+### KONSOLE
 - Bash
 
 ## 使い方
-*Linux:*
+### Linux:
 1.ZIPファイルをダウンロード
 2.ZIPを解凍
 3.linux.shに実行権限を付与する
 4../linux.sh vercheck で動作確認をする
 
-*Windows*
+### Windows
 git cloneで入手する際の注意点
 gitの設定を変更
 改行コードがLFでないと正常に動作しないため、
