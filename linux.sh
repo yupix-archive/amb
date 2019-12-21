@@ -37,7 +37,7 @@ OUTDATE="$SELF_DIR_PATH/assets/"
 main() {
     rm -r ./assets/outdate.txt
     sleep 1
-    echo "ファイルを削除しています..."
+    echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
         echo "ファイルが削除できていません"
@@ -48,15 +48,15 @@ main() {
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     fi
     if [ -e ./assets/outdate.txt ]; then
-        echo "ファイルの生成に成功しました"
+        echo "$FILECREATESUCCESS"
     else
-        echo "ファイルの生成に失敗しました"
+        echo "$FILECREATEFAILED"
     fi
 }
 autoreconfig() {
     rm -r ./assets/outdate.txt
     sleep 1
-    echo "ファイルを削除しています..."
+    echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
         echo "ファイル削除を確認しました..."
@@ -67,15 +67,15 @@ autoreconfig() {
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     fi
     if [ -e ./assets/outdate.txt ]; then
-        echo "ファイルの生成に成功しました"
+        echo "$FILECREATESUCCESS"
     else
-        echo "ファイルの生成に失敗しました"
+        echo "$FILECREATEFAILED"
         read -p "再試行しますか? (y/n)" RETRY
         case "$RETRY" in
         [yY])
             cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
             if [ -e ./assets/outdate.txt ]; then
-                echo "ファイルの生成に成功しました"
+                echo "$FILECREATESUCCESS"
             else
                 echo "ファイルの削除に失敗しました。"
                 echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
@@ -83,7 +83,7 @@ autoreconfig() {
             fi
             ;;
         [nN])
-            echo "サービスを終了します"
+            echo "$ENDSERVICE"
             ;;
         esac
     fi
@@ -341,7 +341,7 @@ start)
         echo "$ENDSERVICE"
         exit
     else
-        echo "$FILEFALSE"
+        echo "$FAILNOTFOUND"
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
@@ -388,10 +388,10 @@ remove)
             echo "$FILEDELETE"
             exit
         else
-            echo "$FILEFALSE"
+            echo "$FAILNOTFOUND"
         fi
         ;;
-    [nN]) echo "$FILEFALSE" ;;
+    [nN]) echo "$FAILNOTFOUND" ;;
     *) ;;
     esac
     ;;
@@ -445,13 +445,13 @@ createconfig)
         sed -i 's/"//g' $CONFIGFILE
         main
     else
-        echo "ファイルが存在しません"
+        echo "$FAILNOTFOUND"
     fi
     ;;
 reconfig)
     rm -r ./assets/outdate.txt
     sleep 1
-    echo "ファイルを削除しています..."
+    echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
         echo "ファイル削除を確認しました..."
@@ -462,15 +462,15 @@ reconfig)
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     fi
     if [ -e ./assets/outdate.txt ]; then
-        echo "ファイルの生成に成功しました"
+        echo "$FILECREATESUCCESS"
     else
-        echo "ファイルの生成に失敗しました"
+        echo "$FILECREATEFAILED"
         read -p "再試行しますか? (y/n)" RETRY
         case "$RETRY" in
         [yY])
             cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
             if [ -e ./assets/outdate.txt ]; then
-                echo "ファイルの生成に成功しました"
+                echo "$FILECREATESUCCESS"
             else
                 echo "ファイルの削除に失敗しました。"
                 echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
@@ -478,7 +478,7 @@ reconfig)
             fi
             ;;
         [nN])
-            echo "サービスを終了します"
+            echo "$ENDSERVICE"
             ;;
         esac
     fi
@@ -601,7 +601,7 @@ setSettings)
 #        echo "$ENDSERVICE"
 #        exit
 #    else
-#        echo "$FILEFALSE"
+#        echo "$FAILNOTFOUND"
 #        read -p "$FILEDOWNLOAD " DATA
 #        case "$DATA" in
 #        [yY])
