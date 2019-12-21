@@ -171,13 +171,13 @@ botstart() {
         echo "ファイルを確認中 2/2"
         if [ -e $SYSTEMFILEMUSIC ]; then
             echo "ファイルが存在します"
-            echo "SYSTEMを開始します"
+            echo "$SYSTEMSTART"
             systemstart
         else
             echo "ファイルが不足しています。"
-            echo "ファイルを作成します"
+            echo "$FAILECREATE"
             mkdir "discord/music/"
-            echo "SYSTEMを開始します"
+            echo "$SYSTEMSTART"
             systemstart
         fi
     else
@@ -187,18 +187,18 @@ botstart() {
         echo "ファイルを確認中 2/2"
         if [ -e $SYSTEMFILEMUSIC ]; then
             echo "ファイルが存在します"
-            echo "SYSTEMを開始します"
+            echo "$SYSTEMSTART"
             systemstart
         else
             echo "ファイルが不足しています。"
-            echo "ファイルを作成します"
+            echo "$FAILECREATE"
             mkdir "discord/music/"
-            echo "SYSTEMを開始します"
+            echo "$SYSTEMSTART"
             systemstart
         fi
         if [ -e $SYSTEMFILE ]; then
             echo "ファイルが存在します"
-            echo "SYSTEMを開始します"
+            echo "$SYSTEMSTART"
             systemstart
             echo "ファイルを確認中 2/2"
             if [ -e $SYSTEMFILEMUSIC ]; then
@@ -648,13 +648,13 @@ setSettings)
             echo "ファイルを確認中 2/2"
             if [ -e $SYSTEMFILEMUSIC ]; then
                 echo "ファイルが存在します"
-                echo "SYSTEMを開始します"
+                echo "$SYSTEMSTART"
                 systemstart
             else
                 echo "ファイルが不足しています。"
-                echo "ファイルを作成します"
+                echo "$FAILECREATE"
                 mkdir "discord/music/"
-                echo "SYSTEMを開始します"
+                echo "$SYSTEMSTART"
                 systemstart
             fi
         else
@@ -664,18 +664,18 @@ setSettings)
             echo "ファイルを確認中 2/2"
             if [ -e $SYSTEMFILEMUSIC ]; then
                 echo "ファイルが存在します"
-                echo "SYSTEMを開始します"
+                echo "$SYSTEMSTART"
                 systemstart
             else
                 echo "ファイルが不足しています。"
-                echo "ファイルを作成します"
+                echo "$FAILECREATE"
                 mkdir "discord/music/"
-                echo "SYSTEMを開始します"
+                echo "$SYSTEMSTART"
                 systemstart
             fi
             if [ -e $SYSTEMFILE ]; then
                 echo "ファイルが存在します"
-                echo "SYSTEMを開始します"
+                echo "$SYSTEMSTART"
                 systemstart
                 echo "ファイルを確認中 2/2"
                 if [ -e $SYSTEMFILEMUSIC ]; then

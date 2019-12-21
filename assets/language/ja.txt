@@ -11,6 +11,7 @@ DEVELOPERMODEWARNING="開発者モードは仕様の都合上旧コードをそ�
 remainingtimeone="残り1秒"
 remainingtimetwo="残り2秒"
 remainingtimethree="残り3秒"
+SYSTEMSTART="SYSTEMを開始します"
 
 
 #ファイル関係メッセージ
@@ -25,6 +26,7 @@ FILEDOWNLOADNOW="ファイルをダウンロードしています"
 FILECREATESUCCESS="ファイルの生成に成功しました"
 FILECREATEFAILED="ファイルの生成に失敗しました"
 FAILEDELETENOW="ファイルを削除しています..."
+FAILECREATE="ファイルを作成します"
 
 #ヘルプ表示メッセージ
 commandhelp="コマンド | 使い方"
