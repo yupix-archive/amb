@@ -13,4 +13,4 @@ setting_backuptime="yes"
 #バックアップの出力先(default= ../)
 
 #CLIENT_ID
-CLIENT_ID=""
+CLIENT_ID="qmGxjOTZZqPbmoO2tOjLiYv-81Spl6Kc"
