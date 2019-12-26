@@ -142,7 +142,6 @@ versioncheck() {
             unzip ./amb$newversion-Linux.zip
             rm -r ./amb$newversion-Linux.zip
             mv ./amb$newversion-Linux ./amb
-
             ;;
         [tT])
             #動作テスト用
@@ -153,7 +152,6 @@ versioncheck() {
             unzip ./amb$newversion-Linux.zip
             rm -r ./amb$newversion-Linux.zip
             mv ./amb$newversion-Linux ./amb
-
             ;;
         [nN])
             echo "アップデートをキャンセルしました"
@@ -513,6 +511,7 @@ setSettings)
     echo "1.Botを起動した際にアップデートを確認する"
     echo "2.Botを起動した際にBOTの招待リンクを表示する"
     echo "3.Botを起動した際にTOKEN等の情報を更新する"
+    echo "4.Botを起動した際Backupを取るかどうか"
     echo "変更したい設定の番号を入力してください..."
     read setsettings
     case "$setsettings" in
@@ -569,6 +568,26 @@ setSettings)
                     echo "変更に失敗しました..."
                 else
                     echo "変更に成功しました!"
+                fi
+            fi
+        else
+            echo "SettingsFileが存在しません..."
+            echo "exit 1"
+        fi
+        ;;
+    [4])
+        echo "SettingsFileの有無を確認しています"
+        if [ -e ./assets/settings.txt ]; then
+            echo "使用可能: yes/no"
+            read settinginputbackup
+            if [ $settinginputbackup = $setting_backuptime ]; then
+                echo "既に設定は "$setting_backuptime" に選択されています"
+            else
+                sed -i -e 's/setting_backuptime="'$setting_backuptime'"/setting_backuptime="'$settinginputbackup'"/' ./assets/settings.txt
+                if [ $settinginputbackup = $setting_backuptime ]; then
+                    echo "変更に失敗しました..."
+                else
+                    echo "設定を$settinginputbackupに変更しました"
                 fi
             fi
         else

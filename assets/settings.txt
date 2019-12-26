@@ -7,5 +7,10 @@ setting_botinvite="yes"
 #BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)
 setting_outputdata="yes"
 
+#バックアップを行うか否か (default = yes)
+setting_backuptime="no"
+
+#バックアップの出力先(default= ../)
+
 #CLIENT_ID
 CLIENT_ID=""
