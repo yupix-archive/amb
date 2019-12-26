@@ -481,17 +481,21 @@ reconfig)
         esac
     fi
     ;;
-cleanconfig)
+removeconfig)
     read -p "$FILEDELETED" CLEANCONFI
     case "$CLEANCONFI" in
     [yY])
-        echo "ファイルの削除を開始します"
-        $CLEANCONFIG
         echo "ファイルの有無を確認しています"
         if [ -e ./assets/outdate.txt ]; then
-            echo "ファイルが存在しない、又は削除に失敗しました"
+            echo "ファイルの削除を開始します"
+            rm $OUTDATADIRECTORY
+            if [ -e ./assets/outdate.txt ]; then
+                echo "ファイルの削除に失敗しました"
+                else
+                echo "ファイルの削除に成功しました"
+            fi
         else
-            echo "ファイルの削除に成功しました"
+            echo "$FILEFALSE."
         fi
         ;;
     [nN]) ;;
@@ -504,6 +508,7 @@ cleanconfig)
 #Botの機能のon/off　　#
 #===================#
 
+#setSettingsに統一された為、廃止
 #settings)
 #    echo "Botを起動する際にアップデートを確認する"
 #    echo "現在の設定: $setting_VersionCheck"

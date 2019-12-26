@@ -23,4 +23,5 @@ SYSTEMFILE="discord"
 SYSTEMFILE="discord"
 SYSTEMMV="./discrod/musicbot/"
 CONFIGFILE="./discord/music/config.txt"
+OUTDATADIRECTORY="./assets/outdate.txt"
 #------------------------------------------------------------------------------#
