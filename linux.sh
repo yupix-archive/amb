@@ -500,18 +500,26 @@ cleanconfig)
     esac
     ;;
 
-settings)
-    echo "Botを起動する際にアップデートを確認する"
-    echo "現在の設定: $setting_VersionCheck"
-    echo "起動した際にBOTの招待URLを表示する"
-    echo "現在の設定: $setting_botinvite"
-    ;;
+#===================#
+#Botの機能のon/off　　#
+#===================#
+
+#settings)
+#    echo "Botを起動する際にアップデートを確認する"
+#    echo "現在の設定: $setting_VersionCheck"
+#    echo "起動した際にBOTの招待URLを表示する"
+#    echo "現在の設定: $setting_botinvite"
+#    ;;
 setSettings)
     echo "どの設定を変更しますか?"
     echo "1.Botを起動した際にアップデートを確認する"
+    echo "   ┗現在の設定: $setting_VersionCheck"
     echo "2.Botを起動した際にBOTの招待リンクを表示する"
+    echo "   ┗現在の設定: $setting_botinvite"
     echo "3.Botを起動した際にTOKEN等の情報を更新する"
+    echo "   ┗現在の設定: $setting_outputdata"
     echo "4.Botを起動した際Backupを取るかどうか"
+    echo "   ┗現在の設定: $setting_backuptime"
     echo "変更したい設定の番号を入力してください..."
     read setsettings
     case "$setsettings" in

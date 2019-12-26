@@ -8,7 +8,7 @@ setting_botinvite="yes"
 setting_outputdata="yes"
 
 #バックアップを行うか否か (default = yes)
-setting_backuptime="no"
+setting_backuptime="yes"
 
 #バックアップの出力先(default= ../)
 
