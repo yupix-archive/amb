@@ -647,11 +647,8 @@ removedev)
         echo -e '\e[1;37;32mパスワード認証に成功しました!\e[0m'
         echo "どのファイルを削除しますか"
         echo "1.JARファイルを削除"
-        echo "   ┗現在の設定: $setting_VersionCheck"
         echo "2.OUTDATA.txtを削除"
-        echo "   ┗現在の設定: $setting_botinvite"
         echo "3.BOTの設定ファイルの削除"
-        echo "   ┗現在の設定: $setting_outputdata"
         echo "変更したい設定の番号を入力してください..."
         read setsettings
         case "$setsettings" in
