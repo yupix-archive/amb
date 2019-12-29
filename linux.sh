@@ -404,6 +404,7 @@ time)
         sleep 1
     done
     ;;
+#廃止予定です
 remove)
     read -p "$FILEDELETED" DATA
     case "$DATA" in
@@ -639,47 +640,56 @@ setSettings)
     ;;
 #開発者向けコマンド
 removedev)
-    echo "どのファイルを削除しますか"
-    echo "1.JARファイルを削除"
-    echo "   ┗現在の設定: $setting_VersionCheck"
-    echo "2.OUTDATA.txtを削除"
-    echo "   ┗現在の設定: $setting_botinvite"
-    echo "3.BOTの設定ファイルの削除"
-    echo "   ┗現在の設定: $setting_outputdata"
-    echo "変更したい設定の番号を入力してください..."
-    read setsettings
-    case "$setsettings" in
-    [1])
-        echo "SettingsFileの有無を確認しています"
-        if [ -e $JAR ]; then
-            echo "使用可能: yes/no"
-            read removeve
-            if [ $removeve = y ]; then
-                rm $JAR
+    echo "開発者モードを有効化するためにはパスワードを入力する必要が有ります"
+    echo "パスワードを入力してください..."
+    read devpassword
+    if [ $devpassword = aXeHBw1dh8QLPhVuw40N ]; then
+        echo -e '\e[1;37;32mパスワード認証に成功しました!\e[0m'
+        echo "どのファイルを削除しますか"
+        echo "1.JARファイルを削除"
+        echo "   ┗現在の設定: $setting_VersionCheck"
+        echo "2.OUTDATA.txtを削除"
+        echo "   ┗現在の設定: $setting_botinvite"
+        echo "3.BOTの設定ファイルの削除"
+        echo "   ┗現在の設定: $setting_outputdata"
+        echo "変更したい設定の番号を入力してください..."
+        read setsettings
+        case "$setsettings" in
+        [1])
+            echo "SettingsFileの有無を確認しています"
+            if [ -e $JAR ]; then
+                echo "使用可能: yes/no"
+                read removeve
+                if [ $removeve = y ]; then
+                    rm $JAR
+                else
+                    echo "(((（ ´◔ ω◔\`）)))ほおおおおおおおおｗｗｗｗｗｗｗｗ"
+                    echo "消すコマンドでキャンセルするんじゃねーよ"
+                    echo "消すコマンドなのに消してねーじゃん"
+                    echo "冗談はスペックだけにしとけよー"
+                    read setsettings
+                    case "$setsettings" in
+                    [n])
+                        echo "は?文句あんの^^;"
+                        ;;
+                    esac
+                    read setsettings
+                    case "$setsettings" in
+                    ["nn"])
+                        echo "なに?まだ用事あるの?"
+                        ;;
+                    esac
+                fi
             else
-                echo "(((（ ´◔ ω◔\`）)))ほおおおおおおおおｗｗｗｗｗｗｗｗ"
-                echo "消すコマンドでキャンセルするんじゃねーよ"
-                echo "消すコマンドなのに消してねーじゃん"
-                echo "冗談はスペックだけにしとけよー"
-                read setsettings
-                case "$setsettings" in
-                [n])
-                    echo "は?文句あんの^^;"
-                    ;;
-                esac
-                read setsettings
-                case "$setsettings" in
-                ["nn"])
-                    echo "なに?まだ用事あるの?"
-                    ;;
-                esac
+                echo "SettingsFileが存在しません..."
+                echo "exit 1"
             fi
-        else
-            echo "SettingsFileが存在しません..."
-            echo "exit 1"
-        fi
-        ;;
-    esac
+            ;;
+        esac
+    else
+        echo "パスワードが間違っています。"
+        echo "開発者モードの有効化に失敗しました。"
+    fi
     ;;
 #動作しません。
 #setprefix)
@@ -739,65 +749,6 @@ removedev)
     echo -e "\033[0;31mstart\033[1;39m: BOTを起動します"
     echo -e "\033[0;31mremove\033[1;39m: jarファイルを削除します"
     echo -e "\033[0;31mRECONFIG\033[1;39m: 出力ファイルを再生成します"
-
-    read -p musicbotstart
-    case "$musicbotstart" in
-    [start])
-        echo "SYSTEMFILEが存在するか確認しています..."
-        echo "ファイルを確認中 1/2"
-        if [ -e $SYSTEMFILE ]; then
-            echo "ファイルが存在します"
-            echo "ファイルを確認中 2/2"
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイルが存在します"
-                echo "$SYSTEMSTART"
-                systemstart
-            else
-                echo "ファイルが不足しています。"
-                echo "$FAILECREATE"
-                mkdir "discord/music/"
-                echo "$SYSTEMSTART"
-                systemstart
-            fi
-        else
-            echo "SYSTEMFILEが欠落しています"
-            mkdir "discord"
-            echo "ファイルを作成しました"
-            echo "ファイルを確認中 2/2"
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイルが存在します"
-                echo "$SYSTEMSTART"
-                systemstart
-            else
-                echo "ファイルが不足しています。"
-                echo "$FAILECREATE"
-                mkdir "discord/music/"
-                echo "$SYSTEMSTART"
-                systemstart
-            fi
-            if [ -e $SYSTEMFILE ]; then
-                echo "ファイルが存在します"
-                echo "$SYSTEMSTART"
-                systemstart
-                echo "ファイルを確認中 2/2"
-                if [ -e $SYSTEMFILEMUSIC ]; then
-                    echo "ファイル"
-                else
-                    echo "test"
-                fi
-            fi
-        fi
-        ;;
-    [nN])
-        exit
-        ;;
-
-    [exit])
-        exit
-        ;;
-
-    *) ;;
-    esac
     ;;
 esac
 exit 0
