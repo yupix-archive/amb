@@ -17,6 +17,7 @@ USER=$(whoami)
 #ファイル関連
 FILE="./discord/music/"
 JAR="./discord/music/JMusicBot-$VERSION-$EDITION.jar"
+PASSWORDDILECTORY="./assets/password.txt"
 AMBSETTINGS="./assets/settings.txt"
 SYSTEMFILEMUSIC="./discord/music"
 SYSTEMFILE="discord"

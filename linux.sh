@@ -8,6 +8,7 @@
 . ./assets/settings.txt
 . ./newversion.txt
 . ./version.txt
+. ./assets/password.txt
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
 output=$3
@@ -640,52 +641,62 @@ setSettings)
     ;;
 #開発者向けコマンド
 removedev)
-    echo "開発者モードを有効化するためにはパスワードを入力する必要が有ります"
-    echo "パスワードを入力してください..."
-    read devpassword
-    if [ $devpassword = aXeHBw1dh8QLPhVuw40N ]; then
-        echo -e '\e[1;37;32mパスワード認証に成功しました!\e[0m'
-        echo "どのファイルを削除しますか"
-        echo "1.JARファイルを削除"
-        echo "2.OUTDATA.txtを削除"
-        echo "3.BOTの設定ファイルの削除"
-        echo "変更したい設定の番号を入力してください..."
-        read setsettings
-        case "$setsettings" in
-        [1])
-            echo "SettingsFileの有無を確認しています"
-            if [ -e $JAR ]; then
-                echo "使用可能: yes/no"
-                read removeve
-                if [ $removeve = y ]; then
-                    rm $JAR
+    if [ -e $PASSWORDDILECTORY ]; then
+        echo "過去のログイン記録を参照中..."
+        if [ aXeHBw1dh8QLPhVuw40N = $password ]; then
+            echo "認証に成功..."
+            echo -e '\e[1;37;32mようこそ開発者様\e[0m'
+            echo "削除するファイルを指定してください"
+            echo "1.JARファイルを削除"
+            echo "2.OUTDATA.txtを削除"
+            echo "3.BOTの設定ファイルの削除"
+            echo "変更したい設定の番号を入力してください..."
+            read setsettings
+            case "$setsettings" in
+            [1])
+                echo "SettingsFileの有無を確認しています"
+                if [ -e $JAR ]; then
+                    echo "使用可能: yes/no"
+                    read removeve
+                    if [ $removeve = y ]; then
+                        rm $JAR
+                    else
+                        echo "(((（ ´◔ ω◔\`）)))ほおおおおおおおおｗｗｗｗｗｗｗｗ"
+                        echo "消すコマンドでキャンセルするんじゃねーよ"
+                        echo "消すコマンドなのに消してねーじゃん"
+                        echo "冗談はスペックだけにしとけよー"
+                        read setsettings
+                        case "$setsettings" in
+                        [n])
+                            echo "は?文句あんの^^;"
+                            ;;
+                        esac
+                        read setsettings
+                        case "$setsettings" in
+                        ["nn"])
+                            echo "なに?まだ用事あるの?"
+                            ;;
+                        esac
+                    fi
                 else
-                    echo "(((（ ´◔ ω◔\`）)))ほおおおおおおおおｗｗｗｗｗｗｗｗ"
-                    echo "消すコマンドでキャンセルするんじゃねーよ"
-                    echo "消すコマンドなのに消してねーじゃん"
-                    echo "冗談はスペックだけにしとけよー"
-                    read setsettings
-                    case "$setsettings" in
-                    [n])
-                        echo "は?文句あんの^^;"
-                        ;;
-                    esac
-                    read setsettings
-                    case "$setsettings" in
-                    ["nn"])
-                        echo "なに?まだ用事あるの?"
-                        ;;
-                    esac
+                    echo "SettingsFileが存在しません..."
+                    echo "exit 1"
                 fi
-            else
-                echo "SettingsFileが存在しません..."
-                echo "exit 1"
-            fi
-            ;;
-        esac
+                ;;
+            esac
+        else
+            echo "パスワードが間違っています。"
+            echo "開発者モードの有効化に失敗しました。"
+        fi
     else
-        echo "パスワードが間違っています。"
-        echo "開発者モードの有効化に失敗しました。"
+        echo "初回起動の為ファイルを作成します"
+        touch ./assets/password.txt
+        echo "開発者モードを有効化するためにはパスワードを入力する必要が有ります"
+        echo "パスワードを入力してください..."
+        read devpassword
+        if [ $devpassword = aXeHBw1dh8QLPhVuw40N ]; then
+            echo "password="aXeHBw1dh8QLPhVuw40N"" >./assets/password.txt
+        fi
     fi
     ;;
 #動作しません。
