@@ -210,7 +210,8 @@ botstart() {
 systemstart() {
     if [ -e $JAR ]; then
         echo "jarファイルにchmodで権限を付与します"
-        sudo chmod u+x $JAR
+        #sudo chmod u+x $JAR
+        chmod u+x $JAR
         echo "$FILETRUE"
         echo "$BOTSTART"
         cd $FILE
@@ -241,26 +242,52 @@ systemstart() {
         [yY])
             echo "ファイルのダウンロードを開始します"
             wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+            if [ -e $JAR ]; then
+                echo "ファイルのダウンロードに失敗しました"
+                exit
+            else
+                echo "ファイルのダウンロードに成功しました"
+            fi
             mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
             java -jar JMusicBot-$VERSION-$EDITION.jar &
-            read -p "テスト" SERVICEEXIT
+            echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
+            read -p "e でSystemを終了します" SERVICEEXIT
+            sleep 1
             case "$SERVICEEXIT" in
-            [yY])
+            [e])
+                pid=$!
+                kill $pid
                 echo "$SERVICECHECK"
+                sleep 2
                 count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
                 if [ $count = 0 ]; then
                     echo "$SERVICEDEAD"
                 else
-                    echo "$SERVICEALIVE"
+                    echo "$SERVICEALIVE(未実装です)"
                 fi
                 echo "$ENDSERVICE"
                 exit
                 ;;
             esac
+            #            read -p "テスト" SERVICEEXIT
+            #            case "$SERVICEEXIT" in
+            #            [yY])
+            #                echo "$SERVICECHECK"
+            #                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+            #                if [ $count = 0 ]; then
+            #                    echo "$SERVICEDEAD"
+            #                else
+            #                    echo "$SERVICEALIVE"
+            #                fi
+            #                echo "$ENDSERVICE"
+            #                exit
+            #                ;;
+            #            esac
+            #            ;;
+            #        [nN]) echo "$ENDSERVICE" ;;
+            #        *) ;;
             ;;
-        [nN]) echo "$ENDSERVICE" ;;
-        *) ;;
         esac
     fi
 }
@@ -491,7 +518,7 @@ removeconfig)
             rm $OUTDATADIRECTORY
             if [ -e ./assets/outdate.txt ]; then
                 echo "ファイルの削除に失敗しました"
-                else
+            else
                 echo "ファイルの削除に成功しました"
             fi
         else
@@ -610,7 +637,50 @@ setSettings)
         ;;
     esac
     ;;
-
+#開発者向けコマンド
+removedev)
+    echo "どのファイルを削除しますか"
+    echo "1.JARファイルを削除"
+    echo "   ┗現在の設定: $setting_VersionCheck"
+    echo "2.OUTDATA.txtを削除"
+    echo "   ┗現在の設定: $setting_botinvite"
+    echo "3.BOTの設定ファイルの削除"
+    echo "   ┗現在の設定: $setting_outputdata"
+    echo "変更したい設定の番号を入力してください..."
+    read setsettings
+    case "$setsettings" in
+    [1])
+        echo "SettingsFileの有無を確認しています"
+        if [ -e $JAR ]; then
+            echo "使用可能: yes/no"
+            read removeve
+            if [ $removeve = y ]; then
+                rm $JAR
+            else
+                echo "(((（ ´◔ ω◔\`）)))ほおおおおおおおおｗｗｗｗｗｗｗｗ"
+                echo "消すコマンドでキャンセルするんじゃねーよ"
+                echo "消すコマンドなのに消してねーじゃん"
+                echo "冗談はスペックだけにしとけよー"
+                read setsettings
+                case "$setsettings" in
+                [n])
+                    echo "は?文句あんの^^;"
+                    ;;
+                esac
+                read setsettings
+                case "$setsettings" in
+                ["nn"])
+                    echo "なに?まだ用事あるの?"
+                    ;;
+                esac
+            fi
+        else
+            echo "SettingsFileが存在しません..."
+            echo "exit 1"
+        fi
+        ;;
+    esac
+    ;;
 #動作しません。
 #setprefix)
 #        read SETPREFIX
