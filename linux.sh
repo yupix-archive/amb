@@ -8,6 +8,8 @@
 . ./assets/settings.txt
 . ./newversion.txt
 . ./version.txt
+. ./version.txt
+
 . ./assets/password.txt
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
@@ -90,45 +92,74 @@ autoreconfig() {
     fi
 }
 vcheck() {
-    #新しいバージョン
-    curl -sl https://akari.fiid.net/app/amb/version.txt >newversion.txt
+    #新バージョンアップ
+    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
     if [ $version = $newversion ]; then
-        echo '現在のambは最新バージョンで実行中です'
+        echo -e '\e[1;37;32m現在のambは最新バージョンで実行中です\e[0m'
     else
-        read -p "$最新のデータをダウンロードしますか?" Newversiondata
+        read -p "$最新のデータをダウンロードしますか?(y/n)" Newversiondata
         case "$Newversiondata" in
         [yY])
             #本番用
-            wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
-            cd ../
+            echo "ファイルのダウンロードを開始します"
+            wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
+            unzip -o amb$newversion-linux.zip
+            cp -r ./amb/* ./
             rm -r ./amb
-            unzip ./amb$newversion-Linux.zip
-            rm -r ./amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux ./amb
-
             ;;
         [tT])
             #動作テスト用
             curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
-            cd ../
+            unzip -o amb$newversion-linux.zip
+            cp -r ./amb/* ./
             rm -r ./amb
-            unzip ./amb$newversion-Linux.zip
-            rm -r ./amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux ./amb
-
             ;;
         [nN])
             echo "アップデートをキャンセルしました"
-            echo "MusicBotを起動します..."
+            echo "システムを終了します..."
             ;;
         esac
     fi
 }
+#vcheck() {
+#    #旧バージョン
+#    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
+#    if [ $version = $newversion ]; then
+#        echo '現在のambは最新バージョンで実行中です'
+#    else
+#        read -p "$最新のデータをダウンロードしますか?" Newversiondata
+#        case "$Newversiondata" in
+#        [yY])
+#            #本番用
+#            echo "ファイルのダウンロードを開始します"
+#            wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
+#            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+#            cd ../
+#            rm -r ./amb
+#            unzip ./amb$newversion-Linux.zip
+#            rm -r ./amb$newversion-Linux.zip
+#            mv ./amb$newversion-Linux ./amb
+#            ;;
+#        [tT])
+#            #動作テスト用
+#            curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
+#            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+#            cd ../
+#            rm -r ./amb
+#            unzip ./amb$newversion-Linux.zip
+#            rm -r ./amb$newversion-Linux.zip
+#            mv ./amb$newversion-Linux ./amb
+#
+#            ;;
+#        [nN])
+#            echo "アップデートをキャンセルしました"
+#            ;;
+#        esac
+#    fi
+#}
+
 versioncheck() {
     #新しいバージョン
-    curl -sl https://akari.fiid.net/app/amb/version.txt >newversion.txt
     if [ $version = $newversion ]; then
         echo '現在のambは最新バージョンで実行中です'
     else
@@ -295,7 +326,13 @@ systemstart() {
 #------------------------------------------------------------------------------#
 case $1 in
 vercheck)
-    vcheck
+    if [ -e ./newversion.txt ]; then
+        vcheck
+    else
+        echo "$FILEFALSE"
+        curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
+        echo "正常な動作を行うため、もうⅠ度実行を宜しくおねがいします。"
+    fi
     ;;
 start)
     if [ yes = $setting_outputdata ]; then
