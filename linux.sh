@@ -105,7 +105,7 @@ vcheck() {
             wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
             unzip -o amb$newversion-linux.zip
             cp -r ./amb/* ./
-            rm -r ./amb
+            rm -rf ./amb
             ;;
         [tT])
             #動作テスト用
