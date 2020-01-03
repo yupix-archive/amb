@@ -193,6 +193,67 @@ versioncheck() {
         esac
     fi
 }
+
+#新型
+newbotstart() {
+    while :; do
+        if [ -e $SYSTEMFILE ]; then
+            for ((i = 0; i < ${#chars}; i++)); do
+                sleep 0.2
+                echo -en "${chars:$i:1} SYSTEMファイルの確認 1/2" "\r"
+            done
+            echo "SYSTEMファイルの確認に成功! 1/2"
+            if [ -e $SYSTEMFILEMUSIC ]; then
+                for ((i = 0; i < ${#chars}; i++)); do
+                    sleep 0.2
+                    echo -en "${chars:$i:1} SYSTEMファイルの確認 2/2" "\r"
+                done
+                echo "SYSTEMファイルの確認に成功! 2/2"
+                echo "$SYSTEMSTART"
+                systemstart
+            else
+                for ((i = 0; i < ${#chars}; i++)); do
+                    sleep 0.2
+                    echo -en "${chars:$i:1} 設定ファイルの有無を確認中..." "\r"
+                done
+                echo "ファイルが存在しない、又は認識できません"
+                echo "$FAILECREATE"
+                mkdir "discord/music/"
+                echo "$SYSTEMSTART"
+                systemstart
+            fi
+            break
+            echo "SYSTEMFILEが欠落しています"
+            mkdir "discord"
+            echo "ファイルを作成しました"
+            echo "ファイルを確認中 2/2"
+            if [ -e $SYSTEMFILEMUSIC ]; then
+                echo "ファイルが存在します"
+                echo "$SYSTEMSTART"
+                systemstart
+            else
+                echo "ファイルが不足しています。"
+                echo "$FAILECREATE"
+                mkdir "discord/music/"
+                echo "$SYSTEMSTART"
+                systemstart
+            fi
+            if [ -e $SYSTEMFILE ]; then
+                echo "ファイルが存在します"
+                echo "$SYSTEMSTART"
+                systemstart
+                echo "ファイルを確認中 2/2"
+                if [ -e $SYSTEMFILEMUSIC ]; then
+                    echo "ファイル"
+                else
+                    echo "test"
+                fi
+            fi
+        fi
+    done
+}
+
+#旧型
 botstart() {
     echo "SYSTEMFILEが存在するか確認しています..."
     echo "ファイルを確認中 1/2"
@@ -676,6 +737,38 @@ setSettings)
         ;;
     esac
     ;;
+
+extension)
+    echo "拡張機能の有効化"
+    echo "1.現在時刻の表示"
+    echo "   ┗現在の設定: $setting_VersionCheck"
+    echo "有効にしたい拡張機能を選択してください."
+    echo "⚠有効化せずに、コマンドを使用することはできません"
+    read setsettings
+    case "$setsettings" in
+    [1])
+        echo "Extension.txtが存在するか確認しています..."
+        if [ -e ./assets/settings.txt ]; then
+            echo "使用可能: yes/no"
+            read updatecheck
+            if [ $updatecheck = $setting_VersionCheck ]; then
+                echo "既に設定は "$setting_VersionCheck" に選択されています"
+            else
+                sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
+                if [ $updatecheck = $setting_VersionCheck ]; then
+                    echo "変更に失敗しました..."
+                else
+                    echo "変更に成功しました!"
+                fi
+            fi
+        else
+            echo "SettingsFileが存在しません..."
+            echo "exit 1"
+        fi
+        ;;
+    esac
+    ;;
+
 #開発者向けコマンド
 removedev)
     if [ -e $PASSWORDDILECTORY ]; then
