@@ -37,6 +37,34 @@ OUTDATE="$SELF_DIR_PATH/assets/"
 #------------------------------------------------------------------------------#
 
 #コマンド
+
+firststart() {
+    if [ $firststart = 0 ]; then
+        sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
+        echo "初回起動ですね!"
+        echo "AMB PROJECTをインストールしていただきありがとうございます。"
+        echo "本Projectでは使用する方が最適な状態でスタートを行えるよう"
+        echo "初期設定を行う必要があるため、次に出てくる物を自分にあったように"
+        echo "設定を行ってください。"
+        echo "#BOTを起動した際にVercheckを走らせるかどうか (default = yes)"
+        read firstsetting1
+        sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$firstsetting1'"/' ./assets/settings.txt
+        echo "BOTを起動した際に招待リンクを表示するかどうか (default = yes)"
+        read firstsetting2
+        sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$firstsetting2'"/' ./assets/settings.txt
+        echo "BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)"
+        read firstsetting3
+        sed -i -e 's/setting_outputdata="'$setting_outputdata'"/setting_outputdata="'$firstsetting3'"/' ./assets/settings.txt
+        echo "バックアップを行うか否か (default = yes)"
+        read firstsetting4
+        sed -i -e 's/setting_backuptime="'$setting_backuptime'"/setting_backuptime="'$firstsetting4'"/' ./assets/settings.txt
+        echo "これで初期設定は終わりです、お疲れ様でした。"
+        echo "この他にもExtension等様々な物の有効化方法が有りますが、詳しくは https://akari.fiid.net/dev/amb/top をご覧ください!"
+        echo "それでは良いDiscordBotライフを!"
+        sleep 10
+    fi
+}
+
 main() {
     rm -r ./assets/outdate.txt
     sleep 1
@@ -99,7 +127,20 @@ vcheck() {
     else
         read -p "$最新のデータをダウンロードしますか?(y/n)" Newversiondata
         case "$Newversiondata" in
-        [yY])
+        [yY])unnko)
+while :
+do
+  read -p "Repeat ? (y/n): " DATA
+    if [ "$DATA" = "yes" ]; then
+      echo "Repeat !!"
+    elif [ "$DATA" = "no" ]; then
+      echo "End repead."
+      break
+    else
+      echo "Input y or n key"
+  fi
+done
+;;
             #本番用
             echo "ファイルのダウンロードを開始します"
             wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
@@ -122,7 +163,20 @@ vcheck() {
     fi
 }
 #vcheck() {
-#    #旧バージョン
+#    #旧バージョンunnko)
+while :
+do
+  read -p "Repeat ? (y/n): " DATA
+    if [ "$DATA" = "yes" ]; then
+      echo "Repeat !!"
+    elif [ "$DATA" = "no" ]; then
+      echo "End repead."
+      break
+    else
+      echo "Input y or n key"
+  fi
+done
+;;
 #    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
 #    if [ $version = $newversion ]; then
 #        echo '現在のambは最新バージョンで実行中です'
@@ -387,6 +441,7 @@ systemstart() {
 #------------------------------------------------------------------------------#
 case $1 in
 vercheck)
+firststart
     if [ -e ./newversion.txt ]; then
         vcheck
     else
@@ -396,6 +451,7 @@ vercheck)
     fi
     ;;
 start)
+    firststart
     if [ yes = $setting_outputdata ]; then
         autoreconfig
         if [ -z "$CLIENT_ID" ]; then
@@ -439,6 +495,7 @@ start)
 
     ;;
 "start-d")
+firststart
     if [ -e $JAR ]; then
         echo "$FILETRUE"
         echo "$BOTSTART"
@@ -489,6 +546,7 @@ start)
     fi
     ;;
 botstatus)
+firststart
     count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
     if [ $count = 0 ]; then
         echo -e "BOTSTATUS: \033[0;31mOFFLINE\033"
@@ -497,6 +555,7 @@ botstatus)
     fi
     ;;
 time)
+firststart
     echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
     while true; do
         echo -e "$(date +%H:%M:%S)\r\c"
@@ -505,6 +564,7 @@ time)
     ;;
 #廃止予定です
 remove)
+firststart
     read -p "$FILEDELETED" DATA
     case "$DATA" in
     [yY])
@@ -527,11 +587,13 @@ remove)
 #===========#
 
 clientid)
+firststart
     echo "現在のCLIENT_IDは $CLIENT_ID に設定されています。"
     echo -e "変更する場合は \033[0;31msetclientid\033[0;39m をお使いください"
     ;;
 
 setclientid)
+firststart
     echo "CLIENT_IDを入力してください"
     read INPUT_CLIENTID
     sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
@@ -543,6 +605,7 @@ setclientid)
 #===========#
 
 invite)
+firststart
     echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
     ;;
 
@@ -550,22 +613,27 @@ invite)
 #Token関係　 #
 #===========#
 token)
+firststart
     echo -e "現在のTokenは $token_  です。"
     echo -e "変更する場合は \033[0;31msettoken\033[0;39m をお使いください"
     ;;
 setoken)
+firststart
     echo "TOKENを入力してください"
     read SETTOKEN
     sed -i -e "s/$TOKEN/token = $SETTOKEN/g" $FILE/config.txt
     ;;
 prefix)
+firststart
     echo -e "$prefix_ です。変更する場合はSETPREFIXをお使いください"
     ;;
 status)
+firststart
     echo -e "現在のステータスは $status_ です。"
     echo -e "変更する場合は \033[0;31msetstatus\033[0;39m をお使いください"
     ;;
 createconfig)
+firststart
     if [ -e $target ]; then
         sed -i 's/"//g' $CONFIGFILE
         main
@@ -574,6 +642,7 @@ createconfig)
     fi
     ;;
 reconfig)
+firststart
     rm -r ./assets/outdate.txt
     sleep 1
     echo "$FAILEDELETENOW"
@@ -609,6 +678,7 @@ reconfig)
     fi
     ;;
 removeconfig)
+firststart
     read -p "$FILEDELETED" CLEANCONFI
     case "$CLEANCONFI" in
     [yY])
@@ -643,6 +713,7 @@ removeconfig)
 #    echo "現在の設定: $setting_botinvite"
 #    ;;
 setSettings)
+firststart
     echo "どの設定を変更しますか?"
     echo "1.Botを起動した際にアップデートを確認する"
     echo "   ┗現在の設定: $setting_VersionCheck"
@@ -739,6 +810,7 @@ setSettings)
     ;;
 
 extension)
+firststart
     echo "拡張機能の有効化"
     echo "1.現在時刻の表示"
     echo "   ┗現在の設定: $setting_VersionCheck"
@@ -771,6 +843,7 @@ extension)
 
 #開発者向けコマンド
 removedev)
+firststart
     if [ -e $PASSWORDDILECTORY ]; then
         echo "過去のログイン記録を参照中..."
         if [ aXeHBw1dh8QLPhVuw40N = $password ]; then
