@@ -127,20 +127,7 @@ vcheck() {
     else
         read -p "$最新のデータをダウンロードしますか?(y/n)" Newversiondata
         case "$Newversiondata" in
-        [yY])unnko)
-while :
-do
-  read -p "Repeat ? (y/n): " DATA
-    if [ "$DATA" = "yes" ]; then
-      echo "Repeat !!"
-    elif [ "$DATA" = "no" ]; then
-      echo "End repead."
-      break
-    else
-      echo "Input y or n key"
-  fi
-done
-;;
+        [yY])
             #本番用
             echo "ファイルのダウンロードを開始します"
             wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
@@ -163,20 +150,7 @@ done
     fi
 }
 #vcheck() {
-#    #旧バージョンunnko)
-while :
-do
-  read -p "Repeat ? (y/n): " DATA
-    if [ "$DATA" = "yes" ]; then
-      echo "Repeat !!"
-    elif [ "$DATA" = "no" ]; then
-      echo "End repead."
-      break
-    else
-      echo "Input y or n key"
-  fi
-done
-;;
+#    #旧バージョン
 #    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
 #    if [ $version = $newversion ]; then
 #        echo '現在のambは最新バージョンで実行中です'
