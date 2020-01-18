@@ -65,9 +65,9 @@ firststart() {
             echo "それでは良いDiscordBotライフを!"
             sleep 10
         else
+            sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
             echo "キャンセルしました!"
-            echo "自動的に10秒後元の動作を行います。"
-            sleep 10
+            echo "自動的に元の動作を行います。"
         fi
     fi
 }
@@ -827,11 +827,10 @@ removedev)
     firststart
     if [ -e $PASSWORDDILECTORY ]; then
         echo "過去のログイン記録を参照中..."
-        #１度目の初回入力でパスワードを入力しなかった場合、
-        #システムが正常に動作しなくなり、無理やり
+        #１度目の初回入力でパスワードを入力しなかった場合、ご自分で
         #paswword.txtにパスワードを記入しても、正常に動作しなくなる可能性がある。
         #バグ有り
-        if [ aXeHBw1dh8QLPhVuw40N = $password ]; then
+        if [[ aXeHBw1dh8QLPhVuw40N = $password ]]; then
             echo "認証に成功..."
             echo -e '\e[1;37;32mようこそ開発者様\e[0m'
             echo "削除するファイルを指定してください"
@@ -858,8 +857,24 @@ removedev)
                 ;;
             esac
         else
-            echo "パスワードが間違っています。"
-            echo "開発者モードの有効化に失敗しました。"
+        echo "おや?どうやら開発者モードの初回起動時になにか問題があったようで、パスワードがきちんと入力できていないようです..."
+        echo "引き続き開発者モードを有効化する場合は、パスワードを入力してください..."
+            while :; do
+                if [[ $RETRYCOUNT = 3 ]]; then
+                    echo "www"
+                    break
+                else
+                    read devpassword
+                    if [ $devpassword = aXeHBw1dh8QLPhVuw40N ]; then
+                        echo "password="aXeHBw1dh8QLPhVuw40N"" >./assets/password.txt
+                        echo "パスワード認証に成功しました!"
+                        break
+                    else
+                        echo "パスワードが間違っています。"
+                        RETRYCOUNT=$((RETRYCOUNT + 1))
+                    fi
+                fi
+            done
         fi
     else
         echo "開発者モードを初めて使用するため、必要なファイルを作成します"
