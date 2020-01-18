@@ -3,6 +3,7 @@
 #外部ファイル読み込み
 . ./assets/outdate.txt
 . ./assets/language/ja.txt
+. ./assets/permissions.txt
 . ./assets/commands.txt
 . ./assets/variable.txt
 . ./assets/settings.txt
@@ -537,11 +538,16 @@ botstatus)
     ;;
 time)
     firststart
-    echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
-    while true; do
-        echo -e "$(date +%H:%M:%S)\r\c"
-        sleep 1
-    done
+    if [ $permission1 = 0 ]; then
+        echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
+        while true; do
+            echo -e "$(date +%H:%M:%S)\r\c"
+            sleep 1
+        done
+    else
+        echo "拡張機能が有効ではありません!"
+        echo "extensionコマンドで有効にしてから再度実行をよろしくおねがいします。"
+    fi
     ;;
 #廃止予定です
 remove)
@@ -793,31 +799,48 @@ setSettings)
 extension)
     firststart
     echo "拡張機能の有効化"
-    echo "1.現在時刻の表示"
-    echo "   ┗現在の設定: $setting_VersionCheck"
     echo "有効にしたい拡張機能を選択してください."
-    echo "⚠有効化せずに、コマンドを使用することはできません"
+    echo "⚠    有効化せずに、コマンドを使用することはできません"
+    echo "1.現在時刻の表示"
+    echo "   ┗  現在の設定: $setting_VersionCheck"
     read setsettings
     case "$setsettings" in
     [1])
-        echo "Extension.txtが存在するか確認しています..."
-        if [ -e ./assets/settings.txt ]; then
-            echo "使用可能: yes/no"
-            read updatecheck
-            if [ $updatecheck = $setting_VersionCheck ]; then
-                echo "既に設定は "$setting_VersionCheck" に選択されています"
+        while :; do
+            echo "使用可能: (y)es / (n)o"
+            echo "入力待ち..."
+            read setsettings
+            if [ $setsettings = y ]; then
+                sed -i -e 's/permission1="'$permission1'"/permission1="1"/' ./assets/permissions.txt
+                echo "拡張機能を有効化しました!"
+                exit 0
+            elif [ $setsettings = n ]; then
+                sed -i -e 's/permission1="'$permission1'"/permission1="0"/' ./assets/permissions.txt
+                echo "拡張機能を無効化しました"
+                exit 0
             else
-                sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
-                if [ $updatecheck = $setting_VersionCheck ]; then
-                    echo "変更に失敗しました..."
-                else
-                    echo "変更に成功しました!"
-                fi
+                echo "y or nを打ってね!"
             fi
-        else
-            echo "SettingsFileが存在しません..."
-            echo "exit 1"
-        fi
+        done
+
+        #        echo "Extension.txtが存在するか確認しています..."
+        #        if [ -e ./assets/settings.txt ]; then
+        #            echo "使用可能: yes/no"
+        #            read updatecheck
+        #            if [ $updatecheck = $setting_VersionCheck ]; then
+        #                echo "既に設定は "$setting_VersionCheck" に選択されています"
+        #            else
+        #                sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
+        #                if [ $updatecheck = $setting_VersionCheck ]; then
+        #                    echo "変更に失敗しました..."
+        #                else
+        #                    echo "変更に成功しました!"
+        #                fi
+        #            fi
+        #        else
+        #            echo "SettingsFileが存在しません..."
+        #            echo "exit 1"
+        #        fi
         ;;
     esac
     ;;
@@ -857,8 +880,8 @@ removedev)
                 ;;
             esac
         else
-        echo "おや?どうやら開発者モードの初回起動時になにか問題があったようで、パスワードがきちんと入力できていないようです..."
-        echo "引き続き開発者モードを有効化する場合は、パスワードを入力してください..."
+            echo "おや?どうやら開発者モードの初回起動時になにか問題があったようで、パスワードがきちんと入力できていないようです..."
+            echo "引き続き開発者モードを有効化する場合は、パスワードを入力してください..."
             while :; do
                 if [[ $RETRYCOUNT = 3 ]]; then
                     echo "www"

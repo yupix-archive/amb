@@ -1,5 +1,5 @@
 #初回起動時要設定(絶対に弄らないでください)
-firststart="0"
+firststart="1"
 
 #BOTを起動した際にVercheckを走らせるかどうか (default = yes)
 setting_VersionCheck="yes"
