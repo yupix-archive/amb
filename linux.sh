@@ -538,7 +538,7 @@ botstatus)
     ;;
 time)
     firststart
-    if [ $permission1 = 0 ]; then
+    if [ $permission1 = 1 ]; then
         echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
         while true; do
             echo -e "$(date +%H:%M:%S)\r\c"
