@@ -40,28 +40,35 @@ OUTDATE="$SELF_DIR_PATH/assets/"
 
 firststart() {
     if [ $firststart = 0 ]; then
-        sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
-        echo "初回起動ですね!"
-        echo "AMB PROJECTをインストールしていただきありがとうございます。"
-        echo "本Projectでは使用する方が最適な状態でスタートを行えるよう"
-        echo "初期設定を行う必要があるため、次に出てくる物を自分にあったように"
-        echo "設定を行ってください。"
-        echo "#BOTを起動した際にVercheckを走らせるかどうか (default = yes)"
-        read firstsetting1
-        sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$firstsetting1'"/' ./assets/settings.txt
-        echo "BOTを起動した際に招待リンクを表示するかどうか (default = yes)"
-        read firstsetting2
-        sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$firstsetting2'"/' ./assets/settings.txt
-        echo "BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)"
-        read firstsetting3
-        sed -i -e 's/setting_outputdata="'$setting_outputdata'"/setting_outputdata="'$firstsetting3'"/' ./assets/settings.txt
-        echo "バックアップを行うか否か (default = yes)"
-        read firstsetting4
-        sed -i -e 's/setting_backuptime="'$setting_backuptime'"/setting_backuptime="'$firstsetting4'"/' ./assets/settings.txt
-        echo "これで初期設定は終わりです、お疲れ様でした。"
-        echo "この他にもExtension等様々な物の有効化方法が有りますが、詳しくは https://akari.fiid.net/dev/amb/top をご覧ください!"
-        echo "それでは良いDiscordBotライフを!"
-        sleep 10
+        read date
+        if [ $date = y]; then
+            sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
+            echo "初回起動ですね!"
+            echo "AMB PROJECTをインストールしていただきありがとうございます。"
+            echo "本Projectでは使用する方が最適な状態でスタートを行えるよう"
+            echo "初期設定を行う必要があるため、次に出てくる物を自分にあったように"
+            echo "設定を行ってください。"
+            echo "#BOTを起動した際にVercheckを走らせるかどうか (default = yes)"
+            read firstsetting1
+            sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$firstsetting1'"/' ./assets/settings.txt
+            echo "BOTを起動した際に招待リンクを表示するかどうか (default = yes)"
+            read firstsetting2
+            sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$firstsetting2'"/' ./assets/settings.txt
+            echo "BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)"
+            read firstsetting3
+            sed -i -e 's/setting_outputdata="'$setting_outputdata'"/setting_outputdata="'$firstsetting3'"/' ./assets/settings.txt
+            echo "バックアップを行うか否か (default = yes)"
+            read firstsetting4
+            sed -i -e 's/setting_backuptime="'$setting_backuptime'"/setting_backuptime="'$firstsetting4'"/' ./assets/settings.txt
+            echo "これで初期設定は終わりです、お疲れ様でした。"
+            echo "この他にもExtension等様々な物の有効化方法が有りますが、詳しくは https://akari.fiid.net/dev/amb/top をご覧ください!"
+            echo "それでは良いDiscordBotライフを!"
+            sleep 10
+        else
+            echo "キャンセルしました!"
+            echo "自動的に10秒後元の動作を行います。"
+            sleep 10
+        fi
     fi
 }
 
@@ -123,7 +130,7 @@ vcheck() {
     #新バージョンアップ
     curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
     if [ $version = $newversion ]; then
-        echo -e '\e[1;37;32m現在のambは最新バージョンで実行中です\e[0m'
+        echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
     else
         read -p "$最新のデータをダウンロードしますか?(y/n)" Newversiondata
         case "$Newversiondata" in
@@ -189,7 +196,7 @@ vcheck() {
 versioncheck() {
     #新しいバージョン
     if [ $version = $newversion ]; then
-        echo '現在のambは最新バージョンで実行中です'
+        echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
     else
         read -p "$最新のデータをダウンロードしますか?" Newversiondata
         case "$Newversiondata" in
@@ -415,7 +422,7 @@ systemstart() {
 #------------------------------------------------------------------------------#
 case $1 in
 vercheck)
-firststart
+    firststart
     if [ -e ./newversion.txt ]; then
         vcheck
     else
@@ -469,7 +476,7 @@ start)
 
     ;;
 "start-d")
-firststart
+    firststart
     if [ -e $JAR ]; then
         echo "$FILETRUE"
         echo "$BOTSTART"
@@ -520,7 +527,7 @@ firststart
     fi
     ;;
 botstatus)
-firststart
+    firststart
     count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
     if [ $count = 0 ]; then
         echo -e "BOTSTATUS: \033[0;31mOFFLINE\033"
@@ -529,7 +536,7 @@ firststart
     fi
     ;;
 time)
-firststart
+    firststart
     echo "現在時刻を表示します。 (終了する場合はCtrl + c)"
     while true; do
         echo -e "$(date +%H:%M:%S)\r\c"
@@ -538,7 +545,7 @@ firststart
     ;;
 #廃止予定です
 remove)
-firststart
+    firststart
     read -p "$FILEDELETED" DATA
     case "$DATA" in
     [yY])
@@ -561,13 +568,13 @@ firststart
 #===========#
 
 clientid)
-firststart
+    firststart
     echo "現在のCLIENT_IDは $CLIENT_ID に設定されています。"
     echo -e "変更する場合は \033[0;31msetclientid\033[0;39m をお使いください"
     ;;
 
 setclientid)
-firststart
+    firststart
     echo "CLIENT_IDを入力してください"
     read INPUT_CLIENTID
     sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
@@ -579,7 +586,7 @@ firststart
 #===========#
 
 invite)
-firststart
+    firststart
     echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
     ;;
 
@@ -587,27 +594,27 @@ firststart
 #Token関係　 #
 #===========#
 token)
-firststart
+    firststart
     echo -e "現在のTokenは $token_  です。"
     echo -e "変更する場合は \033[0;31msettoken\033[0;39m をお使いください"
     ;;
 setoken)
-firststart
+    firststart
     echo "TOKENを入力してください"
     read SETTOKEN
     sed -i -e "s/$TOKEN/token = $SETTOKEN/g" $FILE/config.txt
     ;;
 prefix)
-firststart
+    firststart
     echo -e "$prefix_ です。変更する場合はSETPREFIXをお使いください"
     ;;
 status)
-firststart
+    firststart
     echo -e "現在のステータスは $status_ です。"
     echo -e "変更する場合は \033[0;31msetstatus\033[0;39m をお使いください"
     ;;
 createconfig)
-firststart
+    firststart
     if [ -e $target ]; then
         sed -i 's/"//g' $CONFIGFILE
         main
@@ -616,7 +623,7 @@ firststart
     fi
     ;;
 reconfig)
-firststart
+    firststart
     rm -r ./assets/outdate.txt
     sleep 1
     echo "$FAILEDELETENOW"
@@ -652,7 +659,7 @@ firststart
     fi
     ;;
 removeconfig)
-firststart
+    firststart
     read -p "$FILEDELETED" CLEANCONFI
     case "$CLEANCONFI" in
     [yY])
@@ -687,7 +694,7 @@ firststart
 #    echo "現在の設定: $setting_botinvite"
 #    ;;
 setSettings)
-firststart
+    firststart
     echo "どの設定を変更しますか?"
     echo "1.Botを起動した際にアップデートを確認する"
     echo "   ┗現在の設定: $setting_VersionCheck"
@@ -784,7 +791,7 @@ firststart
     ;;
 
 extension)
-firststart
+    firststart
     echo "拡張機能の有効化"
     echo "1.現在時刻の表示"
     echo "   ┗現在の設定: $setting_VersionCheck"
@@ -817,9 +824,13 @@ firststart
 
 #開発者向けコマンド
 removedev)
-firststart
+    firststart
     if [ -e $PASSWORDDILECTORY ]; then
         echo "過去のログイン記録を参照中..."
+        #１度目の初回入力でパスワードを入力しなかった場合、
+        #システムが正常に動作しなくなり、無理やり
+        #paswword.txtにパスワードを記入しても、正常に動作しなくなる可能性がある。
+        #バグ有り
         if [ aXeHBw1dh8QLPhVuw40N = $password ]; then
             echo "認証に成功..."
             echo -e '\e[1;37;32mようこそ開発者様\e[0m'
@@ -833,27 +844,12 @@ firststart
             [1])
                 echo "SettingsFileの有無を確認しています"
                 if [ -e $JAR ]; then
-                    echo "使用可能: yes/no"
+                    echo "使用可能: (y)es/(n)o"
                     read removeve
                     if [ $removeve = y ]; then
                         rm $JAR
                     else
-                        echo "(((（ ´◔ ω◔\`）)))ほおおおおおおおおｗｗｗｗｗｗｗｗ"
-                        echo "消すコマンドでキャンセルするんじゃねーよ"
-                        echo "消すコマンドなのに消してねーじゃん"
-                        echo "冗談はスペックだけにしとけよー"
-                        read setsettings
-                        case "$setsettings" in
-                        [n])
-                            echo "は?文句あんの^^;"
-                            ;;
-                        esac
-                        read setsettings
-                        case "$setsettings" in
-                        ["nn"])
-                            echo "なに?まだ用事あるの?"
-                            ;;
-                        esac
+                        echo "ファイルの削除をキャンセルしました。"
                     fi
                 else
                     echo "SettingsFileが存在しません..."
@@ -866,7 +862,7 @@ firststart
             echo "開発者モードの有効化に失敗しました。"
         fi
     else
-        echo "初回起動の為ファイルを作成します"
+        echo "開発者モードを初めて使用するため、必要なファイルを作成します"
         touch ./assets/password.txt
         echo "開発者モードを有効化するためにはパスワードを入力する必要が有ります"
         echo "パスワードを入力してください..."
