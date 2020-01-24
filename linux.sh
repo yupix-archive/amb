@@ -640,7 +640,7 @@ reconfig)
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     else
         echo "ファイルが削除できていません"
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+        exit 1
     fi
     if [ -e ./assets/outdate.txt ]; then
         echo "$FILECREATESUCCESS"
