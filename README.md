@@ -17,11 +17,13 @@ JMusicBotの作者様、その他の関係者様等の方々がいて
 今後その他console等にも対応する予定ですが、少々時間がかかると思われますので、宜しくおねがいします
 
 ### OS
-- Ubuntu
-- Windows(WSL必須)
+- [Ubuntu](https://www.ubuntulinux.jp/)
+- [MANJARO](https://manjaro.org/)
+- [Windows(WSL必須)](https://www.microsoft.com/ja-jp/software-download/windows10ISO)
 Windowsで実行する際にwslにはubuntuを使うことを推奨します
 
 ### Shell
+- zsh
 - Bash
 
 ## 使い方
