@@ -14,7 +14,6 @@ ProcessName="JMusicBot-$VERSION-$EDITION.jar"
 SCREEN_NAME=test
 USER=$(whoami)
 
-spinner
 chars="/-\|"
 
 #ファイル関連

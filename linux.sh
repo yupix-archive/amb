@@ -41,35 +41,40 @@ OUTDATE="$SELF_DIR_PATH/assets/"
 
 firststart() {
     if [ $firststart = 0 ]; then
-        read date
-        if [ $date = y]; then
-            sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
-            echo "初回起動ですね!"
-            echo "AMB PROJECTをインストールしていただきありがとうございます。"
-            echo "本Projectでは使用する方が最適な状態でスタートを行えるよう"
-            echo "初期設定を行う必要があるため、次に出てくる物を自分にあったように"
-            echo "設定を行ってください。"
-            echo "#BOTを起動した際にVercheckを走らせるかどうか (default = yes)"
-            read firstsetting1
-            sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$firstsetting1'"/' ./assets/settings.txt
-            echo "BOTを起動した際に招待リンクを表示するかどうか (default = yes)"
-            read firstsetting2
-            sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$firstsetting2'"/' ./assets/settings.txt
-            echo "BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)"
-            read firstsetting3
-            sed -i -e 's/setting_outputdata="'$setting_outputdata'"/setting_outputdata="'$firstsetting3'"/' ./assets/settings.txt
-            echo "バックアップを行うか否か (default = yes)"
-            read firstsetting4
-            sed -i -e 's/setting_backuptime="'$setting_backuptime'"/setting_backuptime="'$firstsetting4'"/' ./assets/settings.txt
-            echo "これで初期設定は終わりです、お疲れ様でした。"
-            echo "この他にもExtension等様々な物の有効化方法が有りますが、詳しくは https://akari.fiid.net/dev/amb/top をご覧ください!"
-            echo "それでは良いDiscordBotライフを!"
-            sleep 10
-        else
-            sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
-            echo "キャンセルしました!"
-            echo "自動的に元の動作を行います。"
-        fi
+        echo "AMBPROJECTをインストールしていただきありがとうございます。"
+        echo "本Projectを自分好みに動かすために初期設定を行うことを推奨します"
+        echo "使用可能 (y)es (n)o"
+        while :; do
+            read INPUT_DATA
+            if [ $INPUT_DATA = y ]; then
+                sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
+                echo "#BOTを起動した際にVercheckを走らせるかどうか (default = yes)"
+                read firstsetting1
+                sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$firstsetting1'"/' ./assets/settings.txt
+                echo "BOTを起動した際に招待リンクを表示するかどうか (default = yes)"
+                read firstsetting2
+                sed -i -e 's/setting_botinvite="'$setting_botinvite'"/setting_botinvite="'$firstsetting2'"/' ./assets/settings.txt
+                echo "BOTを起動した際にTOKEN等の情報を更新するかどうか (default = yes)"
+                read firstsetting3
+                sed -i -e 's/setting_outputdata="'$setting_outputdata'"/setting_outputdata="'$firstsetting3'"/' ./assets/settings.txt
+                echo "バックアップを行うか否か (default = yes)"
+                read firstsetting4
+                sed -i -e 's/setting_backuptime="'$setting_backuptime'"/setting_backuptime="'$firstsetting4'"/' ./assets/settings.txt
+                echo "これで初期設定は終わりです、お疲れ様でした。"
+                echo "この他にもExtension等様々な物の有効化方法が有りますが、詳しくは https://akari.fiid.net/dev/amb/top をご覧ください!"
+                echo "それでは良いDiscordBotライフを!"
+                sleep 10
+                break
+            elif [ $INPUT_DATA = n ]; then
+                sed -i -e 's/firststart="'$firststart'"/firststart="'1'"/' ./assets/settings.txt
+                echo "キャンセルしました!"
+                echo "自動的に元の動作を行います。"
+                break
+            else
+                echo "(y)es or (n)o を入力してください"
+            fi
+        done
+
     fi
 }
 
