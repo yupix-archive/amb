@@ -10,7 +10,7 @@
 . ./newversion.txt
 . ./version.txt
 . ./version.txt
-
+. ./assets/userdata/allsettings.txt
 . ./assets/password.txt
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
@@ -84,11 +84,11 @@ main() {
     echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
-        echo "ファイルが削除できていません"
+        echo "$FILEDELETEFAILED"
 
     else
-        echo "ファイルの削除を確認しました..."
-        echo "ファイルの生成を開始します..."
+        echo "$FILEDELETESUCCESS"
+        echo "$FILECREATESTART"
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     fi
     if [ -e ./assets/outdate.txt ]; then
@@ -103,12 +103,12 @@ autoreconfig() {
     echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
-        echo "ファイルが削除できていません"
+        echo "$FILEDELETEFAILED"
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     else
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
-        echo "ファイルの削除を確認しました..."
-        echo "ファイルの生成を開始します..."
+        echo "$FILEDELETESUCCESS"
+        echo "$FILECREATESTART"
     fi
     if [ -e ./assets/outdate.txt ]; then
         echo "$FILECREATESUCCESS"
@@ -121,7 +121,7 @@ autoreconfig() {
             if [ -e ./assets/outdate.txt ]; then
                 echo "$FILECREATESUCCESS"
             else
-                echo "ファイルの削除に失敗しました。"
+                echo "$FILEDELETESUCCESS。"
                 echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
                 echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
             fi
@@ -142,7 +142,7 @@ vcheck() {
         case "$Newversiondata" in
         [yY])
             #本番用
-            echo "ファイルのダウンロードを開始します"
+            echo "$FILEDOWNLOADSTART"
             wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
             unzip -o amb$newversion-linux.zip
             cp -r ./amb/* ./
@@ -240,77 +240,96 @@ versioncheck() {
 }
 
 #新型
-newbotstart() {
+botstart() {
     while :; do
+        #discordファイルが存在するかチェック
+        for ((i = 0; i < ${#chars}; i++)); do
+            sleep 0.2
+            echo -en "${chars:$i:1} SYSTEMファイルの確認 1/3" "\r"
+        done
         if [ -e $SYSTEMFILE ]; then
+            echo "SYSTEMファイルの確認に成功! 1/3"
+            #musicファイルが存在するかチェック
             for ((i = 0; i < ${#chars}; i++)); do
                 sleep 0.2
-                echo -en "${chars:$i:1} SYSTEMファイルの確認 1/2" "\r"
+                echo -en "${chars:$i:1} SYSTEMファイルの確認 2/3" "\r"
             done
-            echo "SYSTEMファイルの確認に成功! 1/2"
             if [ -e $SYSTEMFILEMUSIC ]; then
+                echo "SYSTEMファイルの確認に成功! 2/3"
+                #jarファイルがあるかチェック
                 for ((i = 0; i < ${#chars}; i++)); do
                     sleep 0.2
-                    echo -en "${chars:$i:1} SYSTEMファイルの確認 2/2" "\r"
+                    echo -en "${chars:$i:1} SYSTEMファイルの確認 3/3" "\r"
                 done
-                echo "SYSTEMファイルの確認に成功! 2/2"
-                echo "$SYSTEMSTART"
-                systemstart
-            else
-                for ((i = 0; i < ${#chars}; i++)); do
-                    sleep 0.2
-                    echo -en "${chars:$i:1} 設定ファイルの有無を確認中..." "\r"
-                done
-                echo "ファイルが存在しない、又は認識できません"
-                echo "$FAILECREATE"
-                mkdir "discord/music/"
-                echo "$SYSTEMSTART"
-                systemstart
-            fi
-            break
-            echo "SYSTEMFILEが欠落しています"
-            mkdir "discord"
-            echo "ファイルを作成しました"
-            echo "ファイルを確認中 2/2"
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイルが存在します"
-                echo "$SYSTEMSTART"
-                systemstart
-            else
-                echo "ファイルが不足しています。"
-                echo "$FAILECREATE"
-                mkdir "discord/music/"
-                echo "$SYSTEMSTART"
-                systemstart
-            fi
-            if [ -e $SYSTEMFILE ]; then
-                echo "ファイルが存在します"
-                echo "$SYSTEMSTART"
-                systemstart
-                echo "ファイルを確認中 2/2"
-                if [ -e $SYSTEMFILEMUSIC ]; then
-                    echo "ファイル"
+                if [ -e $JAR ]; then
+                    echo "SYSTEMファイルの確認に成功! 3/3"
+                    cd $FILE
+                    java -jar JMusicBot-$VERSION-$EDITION.jar &
+                    echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
+                    read -p "e でSystemを終了します" SERVICEEXIT
+                    sleep 1
+                    case "$SERVICEEXIT" in
+                    [e])
+                        pid=$!
+                        kill $pid
+                        echo "$SERVICECHECK"
+                        sleep 2
+                        count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+                        if [ $count = 0 ]; then
+                            echo "$SERVICEDEAD"
+                        else
+                            echo "$SERVICEALIVE"
+                        fi
+                        echo "$ENDSERVICE"
+                        exit
+                        ;;
+                    esac
                 else
-                    echo "test"
+                    echo "ERROR SYSTEMファイルの確認に失敗 3/3"
+                    echo "JARファイルが存在しません"
+                    echo "JARファイルをダウンロードしますか?"
+                    echo "使用可能 (y)es (n)o"
+                    while :; do
+                        read INPUT_DATA
+                        if [ $INPUT_DATA = y ]; then
+                            echo "$FILEDONWLOADSTART"
+                            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+                        elif [ $INPUT_DATA = n ]; then
+                            echo "JARファイルのダウンロードをキャンセルしました。"
+                            echo "サービスを終了します"
+                            exit 0
+                        else
+                            echo "(y)es又は(n)oを入力してください"
+                        fi
+                    done
                 fi
+            else
+                echo "SYSTEMファイルの確認に成功! 2/3"
+                echo "musicファイルが不足しています。"
+                echo "$FILECREATESTART"
             fi
+        #discordファイルが無かった場合
+        else
+            echo "SYSTEMファイルの確認に成功! 1/3"
+            echo "discordファイルが不足しています。"
+            echo "$FILECREATESTART"
         fi
     done
 }
 
 #旧型
-botstart() {
+oldbotstart() {
     echo "SYSTEMFILEが存在するか確認しています..."
     echo "ファイルを確認中 1/2"
     if [ -e $SYSTEMFILE ]; then
-        echo "ファイルが存在します"
+        echo "$FILECHECKSUCCSESS"
         echo "ファイルを確認中 2/2"
         if [ -e $SYSTEMFILEMUSIC ]; then
-            echo "ファイルが存在します"
+            echo "$FILECHECKSUCCSESS"
             echo "$SYSTEMSTART"
             systemstart
         else
-            echo "ファイルが不足しています。"
+            echo "$FILECHECKFAILED"
             echo "$FAILECREATE"
             mkdir "discord/music/"
             echo "$SYSTEMSTART"
@@ -319,21 +338,21 @@ botstart() {
     else
         echo "SYSTEMFILEが欠落しています"
         mkdir "discord"
-        echo "ファイルを作成しました"
+        echo "$FILECREATESUCCESS"
         echo "ファイルを確認中 2/2"
         if [ -e $SYSTEMFILEMUSIC ]; then
-            echo "ファイルが存在します"
+            echo "$FILECHECKSUCCSESS"
             echo "$SYSTEMSTART"
             systemstart
         else
-            echo "ファイルが不足しています。"
+            echo "$FILECHECKFAILED"
             echo "$FAILECREATE"
             mkdir "discord/music/"
             echo "$SYSTEMSTART"
             systemstart
         fi
         if [ -e $SYSTEMFILE ]; then
-            echo "ファイルが存在します"
+            echo "$FILECHECKSUCCSESS"
             echo "$SYSTEMSTART"
             systemstart
             echo "ファイルを確認中 2/2"
@@ -378,13 +397,13 @@ systemstart() {
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            echo "ファイルのダウンロードを開始します"
+            echo "$FILEDOWNLOADSTART"
             wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
             if [ -e $JAR ]; then
-                echo "ファイルのダウンロードに失敗しました"
+                echo "$FILEDOWNLOADFAILED"
                 exit
             else
-                echo "ファイルのダウンロードに成功しました"
+                echo "$FILEDOWNLOADUCCESS"
             fi
             mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
@@ -619,7 +638,7 @@ reconfig)
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
         echo "ファイル削除を確認しました..."
-        echo "ファイルの生成を開始します..."
+        echo "$FILECREATESTART"
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     else
         echo "ファイルが存在しないため"
@@ -635,7 +654,7 @@ reconfig)
             if [ -e ./assets/outdate.txt ]; then
                 echo "$FILECREATESUCCESS"
             else
-                echo "ファイルの削除に失敗しました。"
+                echo "$FILEDELETESUCCESS。"
                 echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
                 echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
             fi
@@ -653,10 +672,10 @@ removeconfig)
     [yY])
         echo "ファイルの有無を確認しています"
         if [ -e ./assets/outdate.txt ]; then
-            echo "ファイルの削除を開始します"
+            echo "$FILEDELETESTART"
             rm $OUTDATADIRECTORY
             if [ -e ./assets/outdate.txt ]; then
-                echo "ファイルの削除に失敗しました"
+                echo "$FILEDELETESUCCESS"
             else
                 echo "ファイルの削除に成功しました"
             fi
@@ -669,7 +688,76 @@ removeconfig)
     *) ;;
     esac
     ;;
-
+dev)
+    firststart
+    if [ -n "$YOURNAME" ]; then
+        if [ -n "$KEISHOU" ]; then
+            echo -e '\e[1;37;32mようこそ'$YOURNAME$KEISHOU'\e[0m'
+        else
+            echo -e '\e[1;37;32mようこそ'$YOURNAME様'\e[0m'
+        fi
+    else
+        if [ -n "$KEISHOU" ]; then
+            echo -e '\e[1;37;32mようこそ開発者'$KEISHOU'\e[0m'
+        else
+            echo -e '\e[1;37;32mようこそ開発者様\e[0m'
+        fi
+    fi
+    echo "ここでは試験段階の機能を試すことができます"
+    echo "何をしますか?"
+    echo "1.自分の名前を決める"
+    echo "2.呼ぶさいの敬称を決める"
+    echo "新型起動方法を実行する"
+    read dev
+    case "$dev" in
+    [1])
+        echo "呼んでほしい名前を書いてください"
+        echo "入力待ち..."
+        read INPUT_YOURNAME
+        sed -i -e 's/YOURNAME="'$YOURNAME'"/YOURNAME="'$INPUT_YOURNAME'"/' ./assets/userdata/allsettings.txt
+        echo "名前を覚えましたよ! $INPUT_YOURNAMEさん!"
+        ;;
+    [2])
+        clear
+        echo "1. さん"
+        echo "2. くん"
+        echo "3. 様"
+        echo "4. ちゃん"
+        echo "5. きゅん"
+        echo "6. 陛下"
+        echo "7. 殿下"
+        echo "8. 自分で設定"
+        read dev2
+        case "$dev2" in
+        [1])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'さん'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [2])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'くん'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [3])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'様'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [4])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'ちゃん'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [5])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'きゅん'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [6])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'陛下'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [7])
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'殿下'"/' ./assets/userdata/allsettings.txt
+            ;;
+        [8])
+            read ORIGINAL_KEISHOU
+            sed -i -e 's/KEISHOU="'$KEISHOU'"/KEISHOU="'$ORIGINAL_KEISHOU'"/' ./assets/userdata/allsettings.txt
+            ;;
+        esac
+        ;;
+    esac
+    ;;
 #===================#
 #Botの機能のon/off　　#
 #===================#
@@ -901,7 +989,19 @@ removedev)
         #バグ有り
         if [[ aXeHBw1dh8QLPhVuw40N = $password ]]; then
             echo "認証に成功..."
-            echo -e '\e[1;37;32mようこそ開発者様\e[0m'
+            if [ -n "$YOURNAME" ]; then
+                if [ -n "$KEISHOU" ]; then
+                    echo -e '\e[1;37;32mようこそ'$YOURNAME$KEISHOU'\e[0m'
+                else
+                    echo -e '\e[1;37;32mようこそ'$YOURNAME様'\e[0m'
+                fi
+            else
+                if [ -n "$KEISHOU" ]; then
+                    echo -e '\e[1;37;32mようこそ開発者'$KEISHOU'\e[0m'
+                else
+                    echo -e '\e[1;37;32mようこそ開発者様\e[0m'
+                fi
+            fi
             echo "削除するファイルを指定してください"
             echo "1.JARファイルを削除"
             echo "2.OUTDATA.txtを削除"

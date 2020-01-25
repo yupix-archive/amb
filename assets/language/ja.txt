@@ -13,7 +13,24 @@ remainingtimetwo="残り2秒"
 remainingtimethree="残り3秒"
 SYSTEMSTART="SYSTEMを開始します"
 
+##ファイルの有無系
+FILECHECKSUCCSESS="ファイルが存在します"
+FILECHECKFAILED="ファイルが存在しません"
+##ファイル作成系
+FILECREATESTART="ファイルの生成を開始します"
+FILECREATESUCCESS="ファイルの作成に成功しました"
+##ファイルの削除系
+FILEDELETESTART="ファイルの削除を開始しました"
+FILEDELETESUCCESS="ファイルの削除に成功しました"
+FILEDELETEFAILED="ファイルの削除に失敗しました"
+##ファイルのダウンロード系
+FILEDOWNLOADSTART="ファイルのダウンロードを開始しました"
+FILEDOWNLOADUCCESS="ファイルのダウンロードに成功しました"
+FILEDOWNLOADFAILED="ファイルのダウンロードに失敗しました"
 
+
+
+#depricated
 #ファイル関係メッセージ
 FILEDELETED="ファイルを削除しますか? (y/n):"
 FILETRUE="ファイルが存在します"

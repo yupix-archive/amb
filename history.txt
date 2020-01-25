@@ -1,7 +1,7 @@
 #2代目スタートコマンド
 #使用不可になった理由:
 #多くのバグを抱えており、一から書き直したほうが早いため。
-
+廃止日:2020/1/25
 start)
     firststart
     if [ yes = $setting_outputdata ]; then
@@ -52,6 +52,7 @@ start)
 #初代設定コマンド
 #使用不可になった理由:
 #キー入力に y/n以外を打つことができ、設定が壊れてしまうため
+廃止日:2020/1/25
 
     [1])
         #        echo "SettingsFileの有無を確認しています"
@@ -138,3 +139,63 @@ start)
         #        fi
         #        ;;
 ;;
+
+#初代から起動時内部で動いてた物(botstartに当たるもの)
+#使用不可になった理由:
+不正なキー入力を受け付ける可能性があったり、コードの可読性を上げるため作り直しが決定
+廃止日:2020/1/26
+#    while :; do
+#        if [ -e $SYSTEMFILE ]; then
+#            for ((i = 0; i < ${#chars}; i++)); do
+#                sleep 0.2
+#                echo -en "${chars:$i:1} SYSTEMファイルの確認 1/2" "\r"
+#            done
+#            echo "SYSTEMファイルの確認に成功! 1/2"
+#            if [ -e $SYSTEMFILEMUSIC ]; then
+#                for ((i = 0; i < ${#chars}; i++)); do
+#                    sleep 0.2
+#                    echo -en "${chars:$i:1} SYSTEMファイルの確認 2/2" "\r"
+#                done
+#                echo "SYSTEMファイルの確認に成功! 2/2"
+#                echo "$SYSTEMSTART"
+#                systemstart
+#            else
+#                for ((i = 0; i < ${#chars}; i++)); do
+#                    sleep 0.2
+#                    echo -en "${chars:$i:1} 設定ファイルの有無を確認中..." "\r"
+#                done
+#                echo "$FILECHECKFAILED"
+#                echo "$FAILECREATE"
+#                mkdir "discord/music/"
+#               echo "$SYSTEMSTART"
+#                systemstart
+#            fi
+#            break
+#            echo "SYSTEMFILEが欠落しています"
+#            mkdir "discord"
+#            echo "$FILECREATESUCCESS"
+#            echo "ファイルを確認中 2/2"
+#            if [ -e $SYSTEMFILEMUSIC ]; then
+#               echo "$FILECHECKSUCCSESS"
+#                echo "$SYSTEMSTART"
+#                systemstart
+#            else
+#                echo "$FILECHECKFAILED"
+#                echo "$FAILECREATE"
+#                mkdir "discord/music/"
+#                echo "$SYSTEMSTART"
+#                systemstart
+#            fi
+#            if [ -e $SYSTEMFILE ]; then
+#                echo "$FILECHECKSUCCSESS"
+#                echo "$SYSTEMSTART"
+#                systemstart
+#                echo "ファイルを確認中 2/2"
+#                if [ -e $SYSTEMFILEMUSIC ]; then
+#                    echo "ファイル"
+#                else
+#                    echo "test"
+#                fi
+#            fi
+#        fi
+#    done
