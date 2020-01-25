@@ -201,10 +201,14 @@ vcheck() {
 
 versioncheck() {
     #新しいバージョン
+    rm -r ./newversion.txt
+    wget -nv https://akari.fiid.net/app/amb/newversion.txt
     if [ $version = $newversion ]; then
         echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
     else
-        read -p "$最新のデータをダウンロードしますか?" Newversiondata
+        echo "最新のデータをダウンロードしますか?"
+        echo "使用可能 (Y)es / (N)o"
+        read Newversiondata
         case "$Newversiondata" in
         [yY])
             #本番用
