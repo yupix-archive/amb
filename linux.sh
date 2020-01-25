@@ -472,6 +472,8 @@ start)
                     botstart
                 fi
             fi
+            #VersionCheckが終わった際最終的にここでBot起動
+            botstart
         fi
     fi
 
@@ -639,8 +641,7 @@ reconfig)
         echo "ファイルの生成を開始します..."
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
     else
-        echo "ファイルが削除できていません"
-        exit 1
+        echo "ファイルが存在しないため"
     fi
     if [ -e ./assets/outdate.txt ]; then
         echo "$FILECREATESUCCESS"
