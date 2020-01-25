@@ -103,12 +103,12 @@ autoreconfig() {
     echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
-        echo "ファイル削除を確認しました..."
-        echo "ファイルの生成を開始します..."
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
-    else
         echo "ファイルが削除できていません"
         cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+    else
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+        echo "ファイルの削除を確認しました..."
+        echo "ファイルの生成を開始します..."
     fi
     if [ -e ./assets/outdate.txt ]; then
         echo "$FILECREATESUCCESS"
@@ -437,6 +437,7 @@ vercheck)
         echo "正常な動作を行うため、もうⅠ度実行を宜しくおねがいします。"
     fi
     ;;
+
 start)
     firststart
     if [ yes = $setting_outputdata ]; then
@@ -446,43 +447,14 @@ start)
             read INPUT_CLIENTID
             sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
             echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
-            if [ yes = $setting_VersionCheck ]; then
-                versioncheck
-            else
-                botstart
-            fi
         fi
-        if [ -z "$CLIENT_ID" ]; then
-            echo "CLIENT_IDを入力してください"
-            read INPUT_CLIENTID
-            sed -i -e 's/CLIENT_ID="'$CLIENT_ID'"/CLIENT_ID="'$INPUT_CLIENTID'"/g' ./assets/settings.txt
-            echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$INPUT_CLIENTID&permissions=8&scope=bot"
-            if [ yes = $setting_VersionCheck ]; then
-                versioncheck
-            else
-                botstart
-            fi
-        else
-            if [ yes = $setting_botinvite ]; then
-                echo "BOTの招待URL: https://discordapp.com/api/oauth2/authorize?client_id=$CLIENT_ID&permissions=8&scope=bot"
-                if [ yes = $setting_VersionCheck ]; then
-                    versioncheck
-                else
-                    botstart
-                fi
-            else
-                if [ yes = $setting_VersionCheck ]; then
-                    versioncheck
-                else
-                    botstart
-                fi
-            fi
-            #VersionCheckが終わった際最終的にここでBot起動
-            botstart
+        if [ yes = $setting_VersionCheck ]; then
+            versioncheck
         fi
+        botstart
     fi
-
     ;;
+
 "start-d")
     firststart
     if [ -e $JAR ]; then
