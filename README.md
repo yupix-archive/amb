@@ -17,9 +17,9 @@ JMusicBotの作者様、その他の関係者様等の方々がいて
 今後その他console等にも対応する予定ですが、少々時間がかかると思われますので、宜しくおねがいします
 
 ### OS
-- [Ubuntu](https://www.ubuntulinux.jp/)
-- [MANJARO](https://manjaro.org/)
-- [Windows(WSL必須)](https://www.microsoft.com/ja-jp/software-download/windows10ISO)
+- [Ubuntu](https://www.ubuntulinux.jp/)  
+- [MANJARO](https://manjaro.org/)  
+- [Windows(WSL必須)](https://www.microsoft.com/ja-jp/software-download/windows10ISO)  
 Windowsで実行する際にwslにはubuntuを使うことを推奨します
 
 ### Shell
@@ -48,7 +48,6 @@ Git for Windows のインストール後、改行コードを自動で変更す�
 1.wsl の有効化
 2.windows.bat 又はwsl上で linux.sh vercheck の実行
 
-
 ## author
 - [MainSYSTEM / yupix](https://github.com/yupix/)
 - [SubSYSTEM / sousuke0422](https://github.com/sousuke0422/)
@@ -63,6 +62,15 @@ Issuesは確認までに時間がかかると思われます、早めの対応�
 望む場合はDiscordへの参加を推奨します。
 - [Discord](https://discord.gg/uDNyePY)
 - [issues](https://github.com/yupix/amb/issues)
+
+## このプロジェクトを使う際の注意点
+このProjectは必ず安定した動作を得られるとは限りません。
+理由としてはコードを追加している最中に私事yupixはできる限りの
+バグになりうる物を修正しているつもりですが、それでもいつの間にかできてしまっている、
+又は他のコードとの相性が悪く、不安定な動作を取るなどです。次に先程述べた通り、このProjectは
+バグを多く含んでおり、それは最新バージョンになれば元あったものは減り、新しいものが増えるかもしれませんが、
+よく使うようなものは早めに修正が施されるため、このProjectは常に最新のバージョンを保つことをおすすめします。
+最後にこのプロジェクトを使い何か問題、損害が発生した場合等は一切我々は保証しませんのでご注意ください。
 
 ## ２時配布に関して
 現在本Projectは多くのバグなどを抱えています。

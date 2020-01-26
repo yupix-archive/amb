@@ -1,7 +1,7 @@
 #!/bin/bash
 #------------------------------------------------------------------------------#
 #外部ファイル読み込み
-. ./assets/outdate.txt
+. ./assets/outdata.txt
 . ./assets/language/ja.txt
 . ./assets/permissions.txt
 . ./assets/commands.txt
@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
 output=$3
-outputdata="./assets/outdate.txt"
+outputdata="./assets/outdata.txt"
 SELF_DIR_PATH=$(
     cd $(dirname $0)
     pwd
@@ -79,7 +79,7 @@ firststart() {
 }
 
 main() {
-    rm -r ./assets/outdate.txt
+    rm -r ./assets/outdata.txt
     sleep 1
     echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
@@ -89,36 +89,36 @@ main() {
     else
         echo "$FILEDELETESUCCESS"
         echo "$FILECREATESTART"
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
     fi
-    if [ -e ./assets/outdate.txt ]; then
+    if [ -e ./assets/outdata.txt ]; then
         echo "$FILECREATESUCCESS"
     else
         echo "$FILECREATEFAILED"
     fi
 }
 autoreconfig() {
-    rm -r ./assets/outdate.txt
+    rm -r ./assets/outdata.txt
     sleep 1
     echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
     if [ -e $outputdata ]; then
         echo "$FILEDELETEFAILED"
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
     else
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
+        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
         echo "$FILEDELETESUCCESS"
         echo "$FILECREATESTART"
     fi
-    if [ -e ./assets/outdate.txt ]; then
+    if [ -e ./assets/outdata.txt ]; then
         echo "$FILECREATESUCCESS"
     else
         echo "$FILECREATEFAILED"
         read -p "再試行しますか? (y/n)" RETRY
         case "$RETRY" in
         [yY])
-            cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
-            if [ -e ./assets/outdate.txt ]; then
+            cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+            if [ -e ./assets/outdata.txt ]; then
                 echo "$FILECREATESUCCESS"
             else
                 echo "$FILEDELETESUCCESS。"
@@ -202,7 +202,7 @@ vcheck() {
 versioncheck() {
     #新しいバージョン
     rm -r ./newversion.txt
-    wget -nv https://akari.fiid.net/app/amb/newversion.txt
+    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
     if [ $version = $newversion ]; then
         echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
     else
@@ -307,12 +307,24 @@ botstart() {
                 echo "SYSTEMファイルの確認に成功! 2/3"
                 echo "musicファイルが不足しています。"
                 echo "$FILECREATESTART"
+                mkdir "discord/music/"
+                if [ -e discord/music/ ]; then
+                    echo "$FILECREATESUCCESS"
+                else
+                    echo "$FILECREATEFAILED"
+                fi
             fi
         #discordファイルが無かった場合
         else
             echo "SYSTEMファイルの確認に成功! 1/3"
             echo "discordファイルが不足しています。"
             echo "$FILECREATESTART"
+            mkdir "discord"
+            if [ -e discord ]; then
+                echo "$FILECREATESUCCESS"
+            else
+                echo "$FILECREATEFAILED"
+            fi
         fi
     done
 }
@@ -632,61 +644,120 @@ createconfig)
     ;;
 reconfig)
     firststart
-    rm -r ./assets/outdate.txt
-    sleep 1
-    echo "$FAILEDELETENOW"
-    echo "ファイルが削除できているか確認しています..."
-    if [ -e $outputdata ]; then
-        echo "ファイル削除を確認しました..."
-        echo "$FILECREATESTART"
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
-    else
-        echo "ファイルが存在しないため"
-    fi
-    if [ -e ./assets/outdate.txt ]; then
-        echo "$FILECREATESUCCESS"
-    else
-        echo "$FILECREATEFAILED"
-        read -p "再試行しますか? (y/n)" RETRY
-        case "$RETRY" in
-        [yY])
-            cat ${target} | awk -f ./lib/convert.awk >./assets/outdate.txt
-            if [ -e ./assets/outdate.txt ]; then
-                echo "$FILECREATESUCCESS"
+    while :; do
+        if [[ $COUNT != $RETRYMAX ]]; then
+            for ((i = 0; i < ${#chars}; i++)); do
+                sleep 0.1
+                echo -en "${chars:$i:1} ファイルの確認 " "\r"
+            done
+            if [ -e ./discord/music/config.txt ]; then
+                if [ -e ./discord/music/config-back.txt ]; then
+                    rm ./discord/music/config-back.txt
+                fi
+                cp ./discord/music/config.txt ./discord/music/config-back.txt
+                sed -i -e "s/\"//" ./discord/music/config-back.txt
+                sed -i -e "s/\"//" ./discord/music/config-back.txt
+                #もとのデータを削除
+                if [ -e ./assets/outdata.txt ]; then
+                    for ((i = 0; i < ${#chars}; i++)); do
+                        sleep 0.1
+                        echo -en "${chars:$i:1} ファイルの確認 " "\r"
+                    done
+                    rm -r ./assets/outdata.txt
+                    for ((i = 0; i < ${#chars}; i++)); do
+                        sleep 0.1
+                        echo -en "${chars:$i:1} ファイルの削除中 " "\r"
+                    done
+                    #削除できたか確認
+                    for ((i = 0; i < ${#chars}; i++)); do
+                        sleep 0.1
+                        echo -en "${chars:$i:1} ファイルの確認中 " "\r"
+                    done
+                    if [ -e ./assets/outdata.txt ]; then
+                        echo "ファイルの削除に失敗しました。"
+                    else
+                        echo "ファイルの削除に成功しました。"
+                        echo "ファイルの生成を開始します。"
+                        for ((i = 0; i < ${#chars}; i++)); do
+                            sleep 0.1
+                            echo -en "${chars:$i:1} ファイルの作成中 " "\r"
+                        done
+                        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+                        for ((i = 0; i < ${#chars}; i++)); do
+                            sleep 0.1
+                            echo -en "${chars:$i:1} ファイルの確認中 " "\r"
+                            if [ -e ./assets/outdata.txt ]; then
+                                echo "ファイルの生成に成功しました。"
+                                break
+                                exit 0
+                            else
+                                echo "ファイルの生成に失敗しました。"
+                                read -p "再試行しますか? (y/n)" RETRY
+                                case "$RETRY" in
+                                [yY])
+                                    cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+                                    if [ -e ./assets/outdata.txt ]; then
+                                        echo "$FILECREATESUCCESS"
+                                    else
+                                        echo "$FILEDELETESUCCESS。"
+                                        echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
+                                        echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
+                                    fi
+                                    ;;
+                                [nN])
+                                    echo "$ENDSERVICE"
+                                    ;;
+                                esac
+                            fi
+                        done
+                    fi
+                else
+                    echo "出力ファイルが存在しません。"
+                    echo "ファイルの生成を開始します。"
+                    for ((i = 0; i < ${#chars}; i++)); do
+                        sleep 0.1
+                        echo -en "${chars:$i:1} ファイルの作成中 " "\r"
+                    done
+                    cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+                    for ((i = 0; i < ${#chars}; i++)); do
+                        sleep 0.1
+                        echo -en "${chars:$i:1} ファイルの確認中 " "\r"
+                        if [ -e ./assets/outdata.txt ]; then
+                            echo "ファイルの生成に成功しました。"
+                            exit 0
+                        else
+                            echo "ファイルの生成に失敗しました。"
+                            read -p "再試行しますか? (y/n)" RETRY
+                            case "$RETRY" in
+                            [yY])
+                                cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+                                if [ -e ./assets/outdata.txt ]; then
+                                    echo "$FILECREATESUCCESS"
+                                else
+                                    echo "$FILEDELETESUCCESS。"
+                                    echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
+                                    echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
+                                fi
+                                ;;
+                            [nN])
+                                echo "$ENDSERVICE"
+                                ;;
+                            esac
+                        fi
+                    done
+                fi
+                exit 0
             else
-                echo "$FILEDELETESUCCESS。"
-                echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
-                echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
-            fi
-            ;;
-        [nN])
-            echo "$ENDSERVICE"
-            ;;
-        esac
-    fi
-    ;;
-removeconfig)
-    firststart
-    read -p "$FILEDELETED" CLEANCONFI
-    case "$CLEANCONFI" in
-    [yY])
-        echo "ファイルの有無を確認しています"
-        if [ -e ./assets/outdate.txt ]; then
-            echo "$FILEDELETESTART"
-            rm $OUTDATADIRECTORY
-            if [ -e ./assets/outdate.txt ]; then
-                echo "$FILEDELETESUCCESS"
-            else
-                echo "ファイルの削除に成功しました"
+                COUNT=$((COUNT + 1))
+                echo "ファイルが存在しません。"
+                echo "失敗数: $COUNT"
             fi
         else
-            echo "$FILEFALSE."
+            echo "失敗数が上限を超えたため、自動的に停止しました。"
+            exit 0
         fi
-        ;;
-    [nN]) ;;
+    done
 
-    *) ;;
-    esac
     ;;
 dev)
     firststart
