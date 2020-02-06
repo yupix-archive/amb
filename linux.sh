@@ -294,6 +294,12 @@ botstart() {
                         if [ $INPUT_DATA = y ]; then
                             echo "$FILEDONWLOADSTART"
                             wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
+                            if [[ -e JMusicBot-$VERSION-$EDITION.jar ]]; then
+                                mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
+                                if [[-e $SELF_DIR_PATH/discord/music/JMusicBot-$VERSION-$EDITION.jar ]]; then
+                                echo "ファイルの移動に成功しました"
+                                fi
+                            fi
                         elif [ $INPUT_DATA = n ]; then
                             echo "JARファイルのダウンロードをキャンセルしました。"
                             echo "サービスを終了します"
