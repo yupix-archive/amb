@@ -6,7 +6,7 @@
 #このファイルが破損するとほぼ全ての動作が不安定になります。
 
 #コマンド関連
-VERSION="0.2.6"
+VERSION="0.2.7"
 EDITION="Linux"
 ProcessName="JMusicBot-$VERSION-$EDITION.jar"
 

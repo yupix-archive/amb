@@ -199,6 +199,38 @@ vcheck() {
 #    fi
 #}
 
+#loading
+SCROLLFILECHECK1() {
+    for ((i = 0; i < ${#chars}; i++)); do
+        sleep 0.2
+        echo -en "${chars:$i:1} SYSTEMファイルの確認 1/3" "\r"
+    done
+}
+SCROLLFILECHECK2() {
+    for ((i = 0; i < ${#chars}; i++)); do
+        sleep 0.2
+        echo -en "${chars:$i:1} SYSTEMファイルの確認 2/3" "\r"
+    done
+}
+SCROLLFILECHECK3() {
+    for ((i = 0; i < ${#chars}; i++)); do
+        sleep 0.2
+        echo -en "${chars:$i:1} SYSTEMファイルの確認 3/3" "\r"
+    done
+}
+FILECREATESTART() {
+    for ((i = 0; i < ${#chars}; i++)); do
+        sleep 0.2
+        echo -en "${chars:$i:1} ファイルの作成中" "\r"
+    done
+}
+FILEDONWLOADNOW() {
+    for ((i = 0; i < ${#chars}; i++)); do
+        sleep 0.2
+        echo -en "${chars:$i:1} ファイルのダウンロード中" "\r"
+    done
+}
+
 versioncheck() {
     #新しいバージョン
     rm -r ./newversion.txt
@@ -243,24 +275,15 @@ versioncheck() {
 botstart() {
     while :; do
         #discordファイルが存在するかチェック
-        for ((i = 0; i < ${#chars}; i++)); do
-            sleep 0.2
-            echo -en "${chars:$i:1} SYSTEMファイルの確認 1/3" "\r"
-        done
+        SCROLLFILECHECK1
         if [ -e $SYSTEMFILE ]; then
             echo "SYSTEMファイルの確認に成功! 1/3"
             #musicファイルが存在するかチェック
-            for ((i = 0; i < ${#chars}; i++)); do
-                sleep 0.2
-                echo -en "${chars:$i:1} SYSTEMファイルの確認 2/3" "\r"
-            done
+            SCROLLFILECHECK2
             if [ -e $SYSTEMFILEMUSIC ]; then
                 echo "SYSTEMファイルの確認に成功! 2/3"
                 #jarファイルがあるかチェック
-                for ((i = 0; i < ${#chars}; i++)); do
-                    sleep 0.2
-                    echo -en "${chars:$i:1} SYSTEMファイルの確認 3/3" "\r"
-                done
+                SCROLLFILECHECK3
                 if [ -e $JAR ]; then
                     echo "SYSTEMファイルの確認に成功! 3/3"
                     cd $FILE
@@ -297,7 +320,7 @@ botstart() {
                             if [[ -e JMusicBot-$VERSION-$EDITION.jar ]]; then
                                 mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
                                 if [[-e $SELF_DIR_PATH/discord/music/JMusicBot-$VERSION-$EDITION.jar ]]; then
-                                echo "ファイルの移動に成功しました"
+                                    echo "ファイルの移動に成功しました"
                                 fi
                             fi
                         elif [ $INPUT_DATA = n ]; then
@@ -331,6 +354,94 @@ botstart() {
             else
                 echo "$FILECREATEFAILED"
             fi
+        fi
+    done
+}
+
+newbotstart() {
+    while :; do
+        #discordファイルが存在するかチェック
+        SCROLLFILECHECK1
+        if [ -e $SYSTEMFILE ]; then
+            if [[ $ERRORCODE = bu8Oong5 ]]; then
+                echo "ファイルの作成に成功しました"
+            fi
+            echo "SYSTEMファイルの確認に成功! 1/3"
+        else
+            echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 1/3"
+            echo "ファイルの作成を開始します。"
+            FILECREATESTART
+            mkdir "discord"
+            ERRORCODE="bu8Oong5"
+        fi
+        #musicファイルが存在するかチェック
+        SCROLLFILECHECK2
+        if [ -e $SYSTEMFILEMUSIC ]; then
+            if [[ $ERRORCODE = foo3UCa4 ]]; then
+                echo "ファイルの作成に成功しました"
+            fi
+            echo "SYSTEMファイルの確認に成功! 2/3"
+        else
+            echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 2/3"
+            echo "ファイルの作成を開始します。"
+            FILECREATESTART
+            mkdir "discord/music"
+            ERRORCODE="foo3UCa4"
+        fi
+        #jarファイルがあるかチェック
+        SCROLLFILECHECK3
+        if [ -e $JAR ]; then
+            echo "SYSTEMファイルの確認に成功! 3/3"
+            chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+            cd $FILE
+            java -jar JMusicBot-$VERSION-$EDITION.jar &
+            echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
+            read -p "e でSystemを終了します" SERVICEEXIT
+            sleep 1
+            case "$SERVICEEXIT" in
+            [e])
+                pid=$!
+                kill $pid
+                echo "$SERVICECHECK"
+                sleep 2
+                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+                if [ $count = 0 ]; then
+                    echo "$SERVICEDEAD"
+                else
+                    echo "$SERVICEALIVE"
+                fi
+                echo "$ENDSERVICE"
+                exit
+                ;;
+            *)
+                echo "変なキー入力"
+                ;;
+            esac
+        else
+            echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 3/3"
+            echo "ファイルをダウンロードしますか? (使用可能: (Y)es or (N)o"
+            read INPUT_DATA
+            case $INPUT_DATA in
+            [yY])
+                while :; do
+                    if [ ! -e $JAR ]; then
+                        FILEDONWLOADNOW
+                        if [[ $FILEDONWLOADCOUNT != 1 ]]; then
+                            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar -O ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+                            FILEDONWLOADCOUNT="1"
+                        else
+                            echo "ファイルのダウンロードに成功"
+                            chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+                            break
+                        fi
+                    fi
+                done
+                ;;
+            [nN])
+                echo "キャンセルしました。"
+                echo "サービスを終了します。"
+                ;;
+            esac
         fi
     done
 }
@@ -468,6 +579,10 @@ systemstart() {
 }
 #------------------------------------------------------------------------------#
 case $1 in
+newbotstart)
+    newbotstart
+    ;;
+
 vercheck)
     firststart
     if [ -e ./newversion.txt ]; then
