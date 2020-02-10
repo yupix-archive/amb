@@ -265,7 +265,6 @@ versioncheck() {
         [nN])
             echo "アップデートをキャンセルしました"
             echo "MusicBotを起動します..."
-            botstart
             ;;
         esac
     fi
