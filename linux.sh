@@ -413,34 +413,40 @@ newbotstart() {
                 exit
                 ;;
             *)
+                #起動した際の終了コマンド等以外を入力した際の処理
                 echo "変なキー入力"
                 ;;
             esac
         else
             echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 3/3"
             echo "ファイルをダウンロードしますか? (使用可能: (Y)es or (N)o"
-            read INPUT_DATA
-            case $INPUT_DATA in
-            [yY])
-                while :; do
-                    if [ ! -e $JAR ]; then
-                        FILEDONWLOADNOW
-                        if [[ $FILEDONWLOADCOUNT != 1 ]]; then
-                            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar -O ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
-                            FILEDONWLOADCOUNT="1"
-                        else
-                            echo "ファイルのダウンロードに成功"
-                            chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
-                            break
+            while [ ! -e $JAR ]; do
+                read -p ">" INPUT_DATA
+                case $INPUT_DATA in
+                [yY])
+                    while :; do
+                        if [ ! -e $JAR ]; then
+                            FILEDONWLOADNOW
+                            if [[ $FILEDONWLOADCOUNT != 1 ]]; then
+                                wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar -O ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+                                FILEDONWLOADCOUNT="1"
+                            else
+                                echo "ファイルのダウンロードに成功"
+                                chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+                                break
+                            fi
                         fi
-                    fi
-                done
-                ;;
-            [nN])
-                echo "キャンセルしました。"
-                echo "サービスを終了します。"
-                ;;
-            esac
+                    done
+                    ;;
+                [nN])
+                    echo "キャンセルしました。"
+                    echo "サービスを終了します。"
+                    ;;
+                *)
+                    echo "(Y)es or (N)o で入力してください"
+                    ;;
+                esac
+            done
         fi
     done
 }
