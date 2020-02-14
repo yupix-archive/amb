@@ -9,3 +9,5 @@ config-back.txt
 outdata.txt
 test.sh
 test
+test-linux.sh
+backup

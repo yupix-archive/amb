@@ -1,3 +1,45 @@
+1代目vcheck(多分)
+#使用不可になった理由:
+#多くのバグを含めており、既にコメントアウトされて時間が立つため。
+廃止日:2020/2/13
+vcheck() {
+    #旧バージョン
+    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
+    if [ $version = $newversion ]; then
+        echo '現在のambは最新バージョンで実行中です'
+    else
+        read -p "最新のデータをダウンロードしますか?" Newversiondata
+        case "$Newversiondata" in
+        [yY])
+            #本番用
+            echo "ファイルのダウンロードを開始します"
+            wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
+            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+            cd ../
+            rm -r ./amb
+            unzip ./amb$newversion-Linux.zip
+            rm -r ./amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux ./amb
+            ;;
+        [tT])
+            #動作テスト用
+            curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
+            cd ../
+            rm -r ./amb
+            unzip ./amb$newversion-Linux.zip
+            rm -r ./amb$newversion-Linux.zip
+            mv ./amb$newversion-Linux ./amb
+
+            ;;
+        [nN])
+            echo "アップデートをキャンセルしました"
+            ;;
+        esac
+    fi
+}
+
+
 #2代目スタートコマンド
 #使用不可になった理由:
 #多くのバグを抱えており、一から書き直したほうが早いため。
