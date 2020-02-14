@@ -166,7 +166,7 @@ vcheck() {
 #loading
 SCROLL() {
     for ((i = 0; i < ${#chars}; i++)); do
-        sleep 0.2
+        sleep 0.05
         echo -en "${chars:$i:1} $PROGRESS_STATUS" "\r"
     done
 }
@@ -324,12 +324,14 @@ botstart() {
 newbotstart() {
     while :; do
         #discordファイルが存在するかチェック
-        SCROLLFILECHECK1
+        PROGRESS_STATUS="SYSTEMファイルの確認中... 1/3"
+        SCROLL
         if [ -e $SYSTEMFILE ]; then
             if [[ $ERRORCODE = bu8Oong5 ]]; then
                 echo "ファイルの作成に成功しました"
             fi
-            echo "SYSTEMファイルの確認に成功! 1/3"
+            PROGRESS_STATUS="SYSTEMファイルの確認に成功 1/3"
+            SCROLL
         else
             echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 1/3"
             echo "ファイルの作成を開始します。"
@@ -339,12 +341,14 @@ newbotstart() {
             ERRORCODE="bu8Oong5"
         fi
         #musicファイルが存在するかチェック
-        SCROLLFILECHECK2
+        PROGRESS_STATUS="SYSTEMファイルの確認中... 2/3     "
+        SCROLL
         if [ -e $SYSTEMFILEMUSIC ]; then
             if [[ $ERRORCODE = foo3UCa4 ]]; then
                 echo "ファイルの作成に成功しました"
             fi
-            echo "SYSTEMファイルの確認に成功! 2/3"
+            PROGRESS_STATUS="SYSTEMファイルの確認に成功! 2/3"
+            SCROLL
         else
             echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 2/3"
             echo "ファイルの作成を開始します。"
@@ -354,12 +358,29 @@ newbotstart() {
             ERRORCODE="foo3UCa4"
         fi
         #jarファイルがあるかチェック
-        SCROLLFILECHECK3
+        PROGRESS_STATUS="SYSTEMファイルの確認中... 3/3     "
+        SCROLL
         if [ -e $JAR ]; then
-            echo "SYSTEMファイルの確認に成功! 3/3"
-            chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+            PROGRESS_STATUS="SYSTEMファイルの確認に成功 3/3"
+            SCROLL
+            echo "全てのファイルの確認に成功しました"
+            chmod +x $SELF_DIR_PATH\discord/music/JMusicBot-$VERSION-$EDITION.jar &
             cd $FILE
             java -jar JMusicBot-$VERSION-$EDITION.jar &
+            count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+            while :; do
+                pid=$!
+                #暫定的(?)
+                if [[ $count -le 1 ]]; then
+                    PROGRESS_STATUS="system starting...."
+                    SCROLL
+                    break
+                else
+                    PROGRESS_STATUS="system starting...."
+                    SCROLL
+                    java -jar JMusicBot-$VERSION-$EDITION.jar &
+                fi
+            done
             echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
             read -p "e でSystemを終了します" SERVICEEXIT
             sleep 1
@@ -396,14 +417,14 @@ newbotstart() {
                         if [ -e $JAR ]; then
                             echo "ダウンロードに成功しました。"
                             #実行権限付与(暫定的)
-                            chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+                            chmod +x $SELF_DIR_PATH\discord/music/JMusicBot-$VERSION-$EDITION.jar &
                             break
                         else
                             PROGRESS_STATUS="ファイルのダウンロード中"
                             wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar -O ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
                             PROGRESS_STATUS="ファイルの確認中"
                             #実行権限付与
-                            chmod 755 ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
+                            chmod +x $SELF_DIR_PATH\discord/music/JMusicBot-$VERSION-$EDITION.jar &
                         fi
                     done
                     ;;

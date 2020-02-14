@@ -1,3 +1,4 @@
+#公開できないもの
 *.jar
 config.txt
 .directory
@@ -7,7 +8,10 @@ newversion.txt
 serversettings.json
 config-back.txt
 outdata.txt
+
+#テスト用の物の為公開はしないもの
+hoo-linux.sh
 test.sh
-test
 test-linux.sh
+test
 backup
