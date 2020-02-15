@@ -1,4 +1,4 @@
-![AUTOMUSICBOT](https://akari.fiid.net/images/AUTOMUSICBOT.jpg "Image")
+![AUTOMUSICBOT](https://akarinext.org/images/AUTOMUSICBOT.jpg "Image")
 # amb
 AutoMusicBot DiscordのBotを自動でダウンロードから、管理を行います。
 MainSystemに関してはほぼ99%程はyupixが作成しています。
