@@ -398,11 +398,14 @@ newbotstart() {
             count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
             while :; do
                 pid=$!
+                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
                 #暫定的(?)
                 if [[ $count -le 1 ]]; then
                     PROGRESS_STATUS="system starting...."
                     SCROLL
                     break
+                elif [[ $count -ge 2 ]]; then
+                    kill $pid
                 else
                     PROGRESS_STATUS="system starting...."
                     SCROLL
@@ -410,11 +413,11 @@ newbotstart() {
                 fi
             done
             echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
-            echo "eでサービスを終了します。"
+            echo "exitでサービスを終了します。"
             while :; do
                 read -p ">" SERVICEEXIT
                 case "$SERVICEEXIT" in
-                [e])
+                exit)
                     pid=$!
                     kill $pid
                     echo "$SERVICECHECK"

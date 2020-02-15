@@ -1,6 +1,8 @@
 # 1.2.5
 ### 不具合の修正
     * newbotstartでJARが不足している際、ダウンロードで不正なキー入力を受け付けた際の動作を修正
+    * newbotstartでe以外のキーを押した際、最初から起動する不具合の修正
+    * newbotstartで既に起動している状態で、動かすとjavaが大量起動される不具合の修正
 ### 仕様の変更など
     *newbotstartでjarが不足時、ダウンロード中のspinnerの作成
     *newbotstartでspinerが全体的に高速化
