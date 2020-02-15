@@ -410,28 +410,30 @@ newbotstart() {
                 fi
             done
             echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
-            read -p "e でSystemを終了します" SERVICEEXIT
-            sleep 1
-            case "$SERVICEEXIT" in
-            [e])
-                pid=$!
-                kill $pid
-                echo "$SERVICECHECK"
-                sleep 2
-                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-                if [ $count = 0 ]; then
-                    echo "$SERVICEDEAD"
-                else
-                    echo "$SERVICEALIVE"
-                fi
-                echo "$ENDSERVICE"
-                exit
-                ;;
-            *)
-                #起動した際の終了コマンド等以外を入力した際の処理
-                echo "変なキー入力"
-                ;;
-            esac
+            echo "eでサービスを終了します。"
+            while :; do
+                read -p ">" SERVICEEXIT
+                case "$SERVICEEXIT" in
+                [e])
+                    pid=$!
+                    kill $pid
+                    echo "$SERVICECHECK"
+                    sleep 2
+                    count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+                    if [ $count = 0 ]; then
+                        echo "$SERVICEDEAD"
+                    else
+                        echo "$SERVICEALIVE"
+                    fi
+                    echo "$ENDSERVICE"
+                    exit
+                    ;;
+                *)
+                    #起動した際の終了コマンド等以外を入力した際の処理
+                    echo "e以外の入力は受け付けていません"
+                    ;;
+                esac
+            done
         else
             echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 3/3"
             echo "ファイルをダウンロードしますか? (使用可能: (Y)es or (N)o"
