@@ -334,28 +334,56 @@ newbotstart() {
             SCROLL
         else
             echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 1/3"
-            echo "ファイルの作成を開始します。"
-            PROGRESS_STATUS="ファイルの作成中"
-            SCROLL
-            mkdir "discord"
-            ERRORCODE="bu8Oong5"
+            while :; do
+                PROGRESS_STATUS="ファイルの作成中"
+                SCROLL
+                if [[ $RETRYCOUNT -le $RETRYMAX ]]; then
+                    if [[ -e $SYSTEMFILE ]]; then
+                        echo "ファイルの作成に成功"
+                        break
+                    else
+                        mkdir "discord"
+                        RETRYCOUNT=$((RETRYCOUNT + 1))
+                    fi
+                else
+                    echo "リトライの最大値に達した為、自動で停止しました。"
+                    echo "もう一度実行し、同じエラーが発生する際は開発者に連絡をください。"
+                    #時間に名前を変えるため、コメントアウト
+                    #ERROR_VARIABLE=$(pwgen)
+                    #ERROR_REPORT=$(echo "ファイルの権限等が不足している可能性があります。" >>./errors/$ERROR_VARIABLE)
+                    exit 1
+                fi
+            done
         fi
         #musicファイルが存在するかチェック
         PROGRESS_STATUS="SYSTEMファイルの確認中... 2/3     "
         SCROLL
         if [ -e $SYSTEMFILEMUSIC ]; then
-            if [[ $ERRORCODE = foo3UCa4 ]]; then
-                echo "ファイルの作成に成功しました"
-            fi
             PROGRESS_STATUS="SYSTEMファイルの確認に成功! 2/3"
             SCROLL
         else
             echo -e "\e[31mERROR\e[m: SYSTEMファイルの確認に失敗 2/3"
-            echo "ファイルの作成を開始します。"
-            PROGRESS_STATUS="ファイルの作成中"
-            SCROLL
-            mkdir "discord/music"
-            ERRORCODE="foo3UCa4"
+            while :; do
+                PROGRESS_STATUS="ファイルの作成中"
+                SCROLL
+                if [[ $RETRYCOUNT -le $RETRYMAX ]]; then
+                    if [[ -e $SYSTEMFILEMUSIC ]]; then
+                        echo "ファイルの作成に成功"
+                        break
+                    else
+                        mkdir "discord/music"
+                        RETRYCOUNT=$((RETRYCOUNT + 1))
+                    fi
+                else
+                    echo "リトライの最大値に達した為、自動で停止しました。"
+                    echo "もう一度実行し、同じエラーが発生する際は開発者に連絡をください。"
+                    #エラーレポートに関しては本当にテスト用(実用性は無い気がする)
+                    #時間に名前を変えるため、コメントアウト
+                    #ERROR_VARIABLE=$(pwgen)
+                    #ERROR_REPORT=$(echo "ファイルの権限等が不足している可能性があります。" >>./errors/$ERROR_VARIABLE)
+                    exit 1
+                fi
+            done
         fi
         #jarファイルがあるかチェック
         PROGRESS_STATUS="SYSTEMファイルの確認中... 3/3     "
@@ -431,6 +459,7 @@ newbotstart() {
                 [nN])
                     echo "キャンセルしました。"
                     echo "サービスを終了します。"
+                    exit 0
                     ;;
                 *)
                     echo "(Y)es or (N)o で入力してください"

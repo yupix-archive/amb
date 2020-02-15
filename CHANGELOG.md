@@ -3,6 +3,8 @@
     * newbotstartでJARが不足している際、ダウンロードで不正なキー入力を受け付けた際の動作を修正
 ### 仕様の変更など
     *newbotstartでjarが不足時、ダウンロード中のspinnerの作成
+    *newbotstartでspinerが全体的に高速化
+    *newbotstartでファイル作成に失敗した際用に、リトライ上限を設定
 ### 今後の予定
     * 文字の変数化
     * 新起動方法の正式実装
