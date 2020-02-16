@@ -422,14 +422,27 @@ newbotstart() {
                     kill $pid
                     echo "$SERVICECHECK"
                     sleep 2
-                    count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-                    if [ $count = 0 ]; then
-                        echo "$SERVICEDEAD"
-                    else
-                        echo "$SERVICEALIVE"
-                    fi
-                    echo "$ENDSERVICE"
-                    exit
+                    while :; do
+                        count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
+                        PROGRESS_STATUS="サービスの生存を確認中"
+                        SCROLL
+                        if [[ $RETRYCOUNT -le $RETRYMAX ]]; then
+                            if [[ $count = 0 ]]; then
+                                PROGRESS_STATUS="サービスのkillに成功"
+                                SCROLL
+                                echo "サービスを終了します..."
+                                exit
+                            else
+                                PROGRESS_STATUS="サービスのkillに失敗"
+                                SCROLL
+                                RETRYCOUNT=$((RETRYCOUNT + 1))
+                            fi
+                        else
+                            echo "リトライの最大値に達した為、自動で停止しました。"
+                            echo "再度 "$SERVICEEXIT" を打ち、このエラーが発生する場合は開発者に報告を宜しくおねがいします。"
+                            break
+                        fi
+                    done
                     ;;
                 *)
                     #起動した際の終了コマンド等以外を入力した際の処理
@@ -609,7 +622,7 @@ systemstart() {
 
 #------------------------------------------------------------------------------#
 case $1 in
-newbotstart)
+newstart)
     newbotstart
     ;;
 

@@ -13,6 +13,9 @@ setting_outputdata="yes"
 #バックアップを行うか否か (default = yes)
 setting_backuptime="yes"
 
+#リトライ上限 (default = 3)
+RETRYMAX="3"
+
 #バックアップの出力先(default= ../)
 
 #CLIENT_ID

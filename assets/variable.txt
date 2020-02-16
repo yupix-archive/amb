@@ -16,9 +16,6 @@ USER=$(whoami)
 
 chars="/-\|"
 
-#リトライ上限
-RETRYMAX="3"
-
 #ファイル関連
 FILE="./discord/music/"
 JAR="./discord/music/JMusicBot-$VERSION-$EDITION.jar"
