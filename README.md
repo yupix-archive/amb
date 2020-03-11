@@ -1,5 +1,8 @@
 ![AUTOMUSICBOT](https://akarinext.org/images/AUTOMUSICBOT.jpg "Image")
 # amb
+現在このProjectは他のProjectに移植する予定があるため、今後
+更新を行う可能性が低くなる可能性が極めて高いことをご了承ください。
+
 AutoMusicBot DiscordのBotを自動でダウンロードから、管理を行います。
 MainSystemに関してはほぼ99%程はyupixが作成しています。
 
