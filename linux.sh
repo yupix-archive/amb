@@ -75,67 +75,6 @@ firststart() {
     fi
 }
 
-main() {
-    if [[ -e ./assets/outdata.txt ]]; then
-        rm -r ./assets/outdata.txt
-        sleep 1
-        echo "$FAILEDELETENOW"
-        echo "ファイルが削除できているか確認しています..."
-        if [ -e $outputdata ]; then
-            echo "$FILEDELETEFAILED"
-
-        else
-            echo "$FILEDELETESUCCESS"
-            echo "$FILECREATESTART"
-            cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-        fi
-        if [ -e ./assets/outdata.txt ]; then
-            echo "$FILECREATESUCCESS"
-        else
-            echo "$FILECREATEFAILED"
-        fi
-    fi
-}
-autoreconfig() {
-    if [[ -e ./assets/outdata.txt ]]; then
-        rm -r ./assets/outdata.txt
-    fi
-    sleep 1
-    echo "$FAILEDELETENOW"
-    echo "ファイルが削除できているか確認しています..."
-    if [[ -e ${target}config.txt ]]; then
-        if [ -e $outputdata ]; then
-            echo "$FILEDELETEFAILED"
-            cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-        else
-            cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-            echo "$FILEDELETESUCCESS"
-            echo "$FILECREATESTART"
-        fi
-        if [ -e ./assets/outdata.txt ]; then
-            echo "$FILECREATESUCCESS"
-        else
-            echo "$FILECREATEFAILED"
-            read -p "再試行しますか? (y/n)" RETRY
-            case "$RETRY" in
-            [yY])
-                cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-                if [ -e ./assets/outdata.txt ]; then
-                    echo "$FILECREATESUCCESS"
-                else
-                    echo "$FILEDELETESUCCESS。"
-                    echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
-                    echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
-                fi
-                ;;
-            [nN])
-                echo "$ENDSERVICE"
-                ;;
-            esac
-        fi
-    fi
-}
-
 #loading
 SCROLL() {
     for ((i = 0; i < ${#chars}; i++)); do
@@ -293,6 +232,55 @@ botstart() {
             done
         fi
         #jarファイルがあるかチェック
+        if [[ ! -e $FILE/config.txt ]]; then
+            echo "BotのTokenを入力してください     "
+            read -p ">" input_token_data
+            echo "OwnerIDを入力してください"
+            read -p ">" input_owner_id_data
+            cat <<EOF >$FILE/config.txt
+token="$input_token_data"
+
+owner="$input_owner_id_data"
+
+prefix="@mention"
+
+game="DEFAULT"
+
+status="ONLINE"
+
+songinstatus="false"
+
+
+altprefix="NONE"
+
+
+success="🎶"
+warning="💡"
+error="🚫"
+loading="⌚"
+searching="🔎"
+
+
+help="help"
+
+npimages="false"
+
+stayinchannel="false"
+
+maxtime="0"
+
+playlistsfolder="Playlists"
+
+updatealerts="true"
+
+lyrics.default="A-Z Lyrics"
+
+
+
+eval="false"
+
+EOF
+        fi
         PROGRESS_STATUS="SYSTEMファイルの確認中... 3/3     "
         SCROLL
         if [ -e $JAR ]; then
@@ -548,25 +536,45 @@ invite)
 #===========#
 #Token関係  #
 #===========#
-token)
-    firststart
-    echo -e "現在のTokenは $token_  です。"
-    echo -e "変更する場合は \033[0;31msettoken\033[0;39m をお使いください"
-    ;;
-setoken)
-    firststart
-    echo "TOKENを入力してください"
-    read SETTOKEN
-    sed -i -e "s/$TOKEN/token = $SETTOKEN/g" $FILE/config.txt
-    ;;
-prefix)
-    firststart
-    echo -e "$prefix_ です。変更する場合はSETPREFIXをお使いください"
-    ;;
-status)
-    firststart
-    echo -e "現在のステータスは $status_ です。"
-    echo -e "変更する場合は \033[0;31msetstatus\033[0;39m をお使いください"
+bot_settings)
+    if [[ -e $FILE/config.txt ]]; then
+        . $FILE/config.txt
+        echo "1.現在のTOKEN"
+        echo "  ┗   ${token}"
+        echo "2.現在のOWNERID"
+        echo "  ┗   ${owner}"
+        echo "3.現在のPREFIX"
+        echo "  ┗   ${prefix}"
+        echo "4.現在のGAME"
+        echo "  ┗   ${game}"
+        echo "5.現在のSTATUS"
+        echo "  ┗   ${status}"
+        echo "項目を変更する場合は、変更したい項目の番号を入力してください。"
+        read -p ">" input_data
+        if [ ${input_data} = 1 -o ${input_data} = 2 -o ${input_data} = 3 -o ${input_data} = 4 -o ${input_data} = 5 ]; then
+            echo "変更する内容を入力してください"
+            read -p ">" input_variable_data
+            case $input_data in
+            1)
+                sed -i -e "s/token=\"${token}\"/token=\"$input_variable_data\"/g" $FILE/config.txt
+                ;;
+            2)
+                sed -i -e "s/owner=\"${owner}\"/owner=\"$input_variable_data\"/g" $FILE/config.txt
+                ;;
+            3)
+                sed -i -e "s/prefix=\"${prefix}\"/prefix=\"$input_variable_data\"/g" $FILE/config.txt
+                ;;
+            4)
+                sed -i -e "s/game=\"${game}\"/game=\"$input_variable_data\"/g" $FILE/config.txt
+                ;;
+            5)
+                sed -i -e "s/status=\"${status}\"/status=\"$input_variable_data\"/g" $FILE/config.txt
+                ;;
+            esac
+        fi
+    else
+        echo "設定ファイルが存在しない為使用できません"
+    fi
     ;;
 createconfig)
     firststart
