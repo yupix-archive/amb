@@ -1,17 +1,14 @@
 #!/bin/bash
 #------------------------------------------------------------------------------#
 #外部ファイル読み込み
-. ./assets/outdata.txt
+#. ./assets/outdata.txt
 . ./assets/language/ja.txt
 . ./assets/permissions.txt
 . ./assets/commands.txt
 . ./assets/variable.txt
 . ./assets/settings.txt
-. ./newversion.txt
-. ./version.txt
 . ./version.txt
 . ./assets/userdata/allsettings.txt
-. ./assets/password.txt
 #------------------------------------------------------------------------------#
 target="$FILE/config.txt"
 output=$3
@@ -79,87 +76,63 @@ firststart() {
 }
 
 main() {
-    rm -r ./assets/outdata.txt
-    sleep 1
-    echo "$FAILEDELETENOW"
-    echo "ファイルが削除できているか確認しています..."
-    if [ -e $outputdata ]; then
-        echo "$FILEDELETEFAILED"
+    if [[ -e ./assets/outdata.txt ]]; then
+        rm -r ./assets/outdata.txt
+        sleep 1
+        echo "$FAILEDELETENOW"
+        echo "ファイルが削除できているか確認しています..."
+        if [ -e $outputdata ]; then
+            echo "$FILEDELETEFAILED"
 
-    else
-        echo "$FILEDELETESUCCESS"
-        echo "$FILECREATESTART"
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-    fi
-    if [ -e ./assets/outdata.txt ]; then
-        echo "$FILECREATESUCCESS"
-    else
-        echo "$FILECREATEFAILED"
+        else
+            echo "$FILEDELETESUCCESS"
+            echo "$FILECREATESTART"
+            cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+        fi
+        if [ -e ./assets/outdata.txt ]; then
+            echo "$FILECREATESUCCESS"
+        else
+            echo "$FILECREATEFAILED"
+        fi
     fi
 }
 autoreconfig() {
-    rm -r ./assets/outdata.txt
+    if [[ -e ./assets/outdata.txt ]]; then
+        rm -r ./assets/outdata.txt
+    fi
     sleep 1
     echo "$FAILEDELETENOW"
     echo "ファイルが削除できているか確認しています..."
-    if [ -e $outputdata ]; then
-        echo "$FILEDELETEFAILED"
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-    else
-        cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-        echo "$FILEDELETESUCCESS"
-        echo "$FILECREATESTART"
-    fi
-    if [ -e ./assets/outdata.txt ]; then
-        echo "$FILECREATESUCCESS"
-    else
-        echo "$FILECREATEFAILED"
-        read -p "再試行しますか? (y/n)" RETRY
-        case "$RETRY" in
-        [yY])
+    if [[ -e ${target}config.txt ]]; then
+        if [ -e $outputdata ]; then
+            echo "$FILEDELETEFAILED"
             cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
-            if [ -e ./assets/outdata.txt ]; then
-                echo "$FILECREATESUCCESS"
-            else
-                echo "$FILEDELETESUCCESS。"
-                echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
-                echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
-            fi
-            ;;
-        [nN])
-            echo "$ENDSERVICE"
-            ;;
-        esac
-    fi
-}
-vcheck() {
-    #新バージョンアップ
-    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
-    if [ $version = $newversion ]; then
-        echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
-    else
-        read -p "最新のデータをダウンロードしますか?(y/n)" Newversiondata
-        case "$Newversiondata" in
-        [yY])
-            #本番用
-            echo "$FILEDOWNLOADSTART"
-            wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
-            unzip -o amb$newversion-linux.zip
-            cp -r ./amb/* ./
-            rm -rf ./amb
-            ;;
-        [tT])
-            #動作テスト用
-            curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
-            unzip -o amb$newversion-linux.zip
-            cp -r ./amb/* ./
-            rm -r ./amb
-            ;;
-        [nN])
-            echo "アップデートをキャンセルしました"
-            echo "システムを終了します..."
-            ;;
-        esac
+        else
+            cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+            echo "$FILEDELETESUCCESS"
+            echo "$FILECREATESTART"
+        fi
+        if [ -e ./assets/outdata.txt ]; then
+            echo "$FILECREATESUCCESS"
+        else
+            echo "$FILECREATEFAILED"
+            read -p "再試行しますか? (y/n)" RETRY
+            case "$RETRY" in
+            [yY])
+                cat ${target} | awk -f ./lib/convert.awk >./assets/outdata.txt
+                if [ -e ./assets/outdata.txt ]; then
+                    echo "$FILECREATESUCCESS"
+                else
+                    echo "$FILEDELETESUCCESS。"
+                    echo "ファイルの生成に合計2回失敗したため、サービスを終了します"
+                    echo "再度実行し、ファイルの生成に失敗する場合は製作者に報告を宜しくおねがいします"
+                fi
+                ;;
+            [nN])
+                echo "$ENDSERVICE"
+                ;;
+            esac
+        fi
     fi
 }
 
@@ -196,132 +169,66 @@ FILEDONWLOADNOW() {
 }
 
 versioncheck() {
-    #新しいバージョン
-    rm -r ./newversion.txt
-    curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
-    if [ $version = $newversion ]; then
-        echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
+    geturl=$(curl -s https://github.com/jagrosh/MusicBot/releases/latest | grep -oE 'http(s?)://[0-9a-zA-Z?=#+_&:/.%]+')
+    get_new_bot_version=$(echo "${geturl}" | sed 's/https\:\/\/github.com\/jagrosh\/MusicBot\/releases\/tag\///g' | sed -e 's/[^0-9]//g')
+    if [[ "10#${get_new_bot_version}" -le "10#${MUSIC_BOT_VERSION}" ]]; then
+        echo -e '現在のJmusicBotは\e[1;37;32m最新バージョン\e[0mで実行中です '
     else
-        echo "最新のデータをダウンロードしますか?"
-        echo "使用可能 (Y)es / (N)o"
-        read Newversiondata
-        case "$Newversiondata" in
-        [yY])
-            #本番用
-            wget https:/akari.fiid.net/releases/download/$newversion/amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
-            cd ../
-            rm -r ./amb
-            unzip ./amb$newversion-Linux.zip
-            rm -r ./amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux ./amb
+        echo "アップデートが存在します。"
+        echo "アップデートしますか? (Y)es or (N)o [Default: Yes]"
+        read -p ">" input_check_data
+        input_check_data=${input_check_data:-y}
+        case $input_check_data in
+        [yY] | [yY][eE][sS])
+            sed -i -e 's/MUSIC_BOT_VERSION="'$MUSIC_BOT_VERSION'"/MUSIC_BOT_VERSION="'$get_new_bot_version'"/g' ./assets/variable.txt
+            echo "アップデート中..."
+            . ./assets/variable.txt
+            if [[ ${MUSIC_BOT_VERSION} = ${get_new_bot_version} ]]; then
+                echo -e '\e[1;37;32mアップデートに成功しました\e[0m'
+            else
+                echo "アップデートに失敗しました。"
+                echo "再度実行し、失敗する場合は開発者にご連絡ください"
+            fi
             ;;
-        [tT])
-            #動作テスト用
-            curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux.zip ../amb$newversion-Linux.zip
-            cd ../
-            rm -r ./amb
-            unzip ./amb$newversion-Linux.zip
-            rm -r ./amb$newversion-Linux.zip
-            mv ./amb$newversion-Linux ./amb
-            ;;
-        [nN])
-            echo "アップデートをキャンセルしました"
-            echo "MusicBotを起動します..."
+        [nN] | [nN][oO])
+            echo "キャンセルしました"
             ;;
         esac
     fi
-}
-
-#新型
-botstart() {
-    while :; do
-        #discordファイルが存在するかチェック
-        SCROLLFILECHECK1
-        if [ -e $SYSTEMFILE ]; then
-            echo "SYSTEMファイルの確認に成功! 1/3"
-            #musicファイルが存在するかチェック
-            SCROLLFILECHECK2
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "SYSTEMファイルの確認に成功! 2/3"
-                #jarファイルがあるかチェック
-                SCROLLFILECHECK3
-                if [ -e $JAR ]; then
-                    echo "SYSTEMファイルの確認に成功! 3/3"
-                    cd $FILE
-                    java -jar JMusicBot-$VERSION-$EDITION.jar &
-                    echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
-                    read -p "e でSystemを終了します" SERVICEEXIT
-                    sleep 1
-                    case "$SERVICEEXIT" in
-                    [e])
-                        pid=$!
-                        kill $pid
-                        echo "$SERVICECHECK"
-                        sleep 2
-                        count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-                        if [ $count = 0 ]; then
-                            echo "$SERVICEDEAD"
-                        else
-                            echo "$SERVICEALIVE"
-                        fi
-                        echo "$ENDSERVICE"
-                        exit
-                        ;;
-                    esac
-                else
-                    echo "ERROR SYSTEMファイルの確認に失敗 3/3"
-                    echo "JARファイルが存在しません"
-                    echo "JARファイルをダウンロードしますか?"
-                    echo "使用可能 (y)es (n)o"
-                    while :; do
-                        read INPUT_DATA
-                        if [ $INPUT_DATA = y ]; then
-                            echo "$FILEDONWLOADSTART"
-                            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
-                            if [[ -e JMusicBot-$VERSION-$EDITION.jar ]]; then
-                                mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
-                                if [[-e $SELF_DIR_PATH/discord/music/JMusicBot-$VERSION-$EDITION.jar ]]; then
-                                    echo "ファイルの移動に成功しました"
-                                fi
-                            fi
-                        elif [ $INPUT_DATA = n ]; then
-                            echo "JARファイルのダウンロードをキャンセルしました。"
-                            echo "サービスを終了します"
-                            exit 0
-                        else
-                            echo "(y)es又は(n)oを入力してください"
-                        fi
-                    done
-                fi
-            else
-                echo "SYSTEMファイルの確認に成功! 2/3"
-                echo "musicファイルが不足しています。"
-                echo "$FILECREATESTART"
-                mkdir "discord/music/"
-                if [ -e discord/music/ ]; then
-                    echo "$FILECREATESUCCESS"
-                else
-                    echo "$FILECREATEFAILED"
-                fi
-            fi
-        #discordファイルが無かった場合
+    curl -sl https://repo.akarinext.org/pub/amb/newversion.txt >newversion.txt
+    if [[ -e ./newversion.txt ]]; then
+        . ./newversion.txt
+        if [ $newversion -le $version ]; then
+            echo -e '現在のambは\e[1;37;32m最新バージョン\e[0mで実行中です '
         else
-            echo "SYSTEMファイルの確認に成功! 1/3"
-            echo "discordファイルが不足しています。"
-            echo "$FILECREATESTART"
-            mkdir "discord"
-            if [ -e discord ]; then
-                echo "$FILECREATESUCCESS"
-            else
-                echo "$FILECREATEFAILED"
-            fi
+            read -p "最新のデータをダウンロードしますか?(y/n)" Newversiondata
+            case "$Newversiondata" in
+            [yY])
+                #本番用
+                echo "$FILEDOWNLOADSTART"
+                wget https://github.com/yupix/amb/releases/download/$newversion/amb$newversion-linux.zip
+                unzip -o amb$newversion-linux.zip
+                cp -r ./amb/* ./
+                rm -rf ./amb
+                ;;
+            [tT])
+                #動作テスト用
+                curl -OL https://akari.fiid.net/app/releases/download/$newversion/amb$newversion-Linux.zip
+                unzip -o amb$newversion-linux.zip
+                cp -r ./amb/* ./
+                rm -r ./amb
+                ;;
+            [nN])
+                echo "アップデートをキャンセルしました"
+                echo "システムを終了します..."
+                ;;
+            esac
         fi
-    done
+    fi
 }
-
-newbotstart() {
+botstart() {
+    regular_version=$(echo "${MUSIC_BOT_VERSION}" | sed -e 's/\(.\)/\1./'g | sed -e 's/.$//')
+    JAR="./discord/music/JMusicBot-$regular_version-$EDITION.jar"
     while :; do
         #discordファイルが存在するかチェック
         PROGRESS_STATUS="SYSTEMファイルの確認中... 1/3"
@@ -392,9 +299,9 @@ newbotstart() {
             PROGRESS_STATUS="SYSTEMファイルの確認に成功 3/3"
             SCROLL
             echo "全てのファイルの確認に成功しました"
-            chmod +x $SELF_DIR_PATH\discord/music/JMusicBot-$VERSION-$EDITION.jar &
+            chmod +x ./discord/music/JMusicBot-$regular_version-$EDITION.jar
             cd $FILE
-            java -jar JMusicBot-$VERSION-$EDITION.jar &
+            java -jar JMusicBot-$regular_version-$EDITION.jar &
             count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
             while :; do
                 pid=$!
@@ -409,7 +316,7 @@ newbotstart() {
                 else
                     PROGRESS_STATUS="system starting...."
                     SCROLL
-                    java -jar JMusicBot-$VERSION-$EDITION.jar &
+                    java -jar JMusicBot-$regular_version-$EDITION.jar &
                 fi
             done
             echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
@@ -455,6 +362,7 @@ newbotstart() {
             echo "ファイルをダウンロードしますか? (使用可能: (Y)es or (N)o"
             while [ ! -e $JAR ]; do
                 read -p ">" INPUT_DATA
+                INPUT_DATA=${INPUT_DATA:-y}
                 case $INPUT_DATA in
                 [yY])
                     while [[ $progress_status != SUCCESS ]]; do
@@ -462,15 +370,14 @@ newbotstart() {
                         SCROLL
                         if [ -e $JAR ]; then
                             echo "ダウンロードに成功しました。"
-                            #実行権限付与(暫定的)
-                            chmod +x $SELF_DIR_PATH\discord/music/JMusicBot-$VERSION-$EDITION.jar &
                             break
                         else
+                            if [[ -z $dummy ]]; then
+                                wget -q https://github.com/jagrosh/MusicBot/releases/download/$regular_version/JMusicBot-$regular_version-$EDITION.jar -O ./discord/music/JMusicBot-$regular_version-$EDITION.jar &
+                                dummy="null"
+                            fi
                             PROGRESS_STATUS="ファイルのダウンロード中"
-                            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar -O ./discord/music/JMusicBot-$VERSION-$EDITION.jar &
                             PROGRESS_STATUS="ファイルの確認中"
-                            #実行権限付与
-                            chmod +x $SELF_DIR_PATH\discord/music/JMusicBot-$VERSION-$EDITION.jar &
                         fi
                     done
                     ;;
@@ -488,148 +395,12 @@ newbotstart() {
     done
 }
 
-#旧型
-oldbotstart() {
-    echo "SYSTEMFILEが存在するか確認しています..."
-    echo "ファイルを確認中 1/2"
-    if [ -e $SYSTEMFILE ]; then
-        echo "$FILECHECKSUCCSESS"
-        echo "ファイルを確認中 2/2"
-        if [ -e $SYSTEMFILEMUSIC ]; then
-            echo "$FILECHECKSUCCSESS"
-            echo "$SYSTEMSTART"
-            systemstart
-        else
-            echo "$FILECHECKFAILED"
-            echo "$FAILECREATE"
-            mkdir "discord/music/"
-            echo "$SYSTEMSTART"
-            systemstart
-        fi
-    else
-        echo "SYSTEMFILEが欠落しています"
-        mkdir "discord"
-        echo "$FILECREATESUCCESS"
-        echo "ファイルを確認中 2/2"
-        if [ -e $SYSTEMFILEMUSIC ]; then
-            echo "$FILECHECKSUCCSESS"
-            echo "$SYSTEMSTART"
-            systemstart
-        else
-            echo "$FILECHECKFAILED"
-            echo "$FAILECREATE"
-            mkdir "discord/music/"
-            echo "$SYSTEMSTART"
-            systemstart
-        fi
-        if [ -e $SYSTEMFILE ]; then
-            echo "$FILECHECKSUCCSESS"
-            echo "$SYSTEMSTART"
-            systemstart
-            echo "ファイルを確認中 2/2"
-            if [ -e $SYSTEMFILEMUSIC ]; then
-                echo "ファイル"
-            else
-                echo "test"
-            fi
-        fi
-    fi
-}
-systemstart() {
-    if [ -e $JAR ]; then
-        echo "jarファイルにchmodで権限を付与します"
-        #sudo chmod u+x $JAR
-        chmod u+x $JAR
-        echo "$FILETRUE"
-        echo "$BOTSTART"
-        cd $FILE
-        java -jar JMusicBot-$VERSION-$EDITION.jar &
-        echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
-        read -p "e でSystemを終了します" SERVICEEXIT
-        sleep 1
-        case "$SERVICEEXIT" in
-        [e])
-            pid=$!
-            kill $pid
-            echo "$SERVICECHECK"
-            sleep 2
-            count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-            if [ $count = 0 ]; then
-                echo "$SERVICEDEAD"
-            else
-                echo "$SERVICEALIVE"
-            fi
-            echo "$ENDSERVICE"
-            exit
-            ;;
-        esac
-    else
-        echo "$JARFALSE"
-        read -p "$FILEDOWNLOAD " DATA
-        case "$DATA" in
-        [yY])
-            echo "$FILEDOWNLOADSTART"
-            wget -q https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
-            if [ -e $JAR ]; then
-                echo "$FILEDOWNLOADFAILED"
-                exit
-            else
-                echo "$FILEDOWNLOADUCCESS"
-            fi
-            mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
-            cd $FILE
-            java -jar JMusicBot-$VERSION-$EDITION.jar &
-            echo -e 'BOTSTATUS: \e[1;37;32mONLINE\e[0m'
-            read -p "e でSystemを終了します" SERVICEEXIT
-            sleep 1
-            case "$SERVICEEXIT" in
-            [e])
-                pid=$!
-                kill $pid
-                echo "$SERVICECHECK"
-                sleep 2
-                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-                if [ $count = 0 ]; then
-                    echo "$SERVICEDEAD"
-                else
-                    echo "$SERVICEALIVE(未実装です)"
-                fi
-                echo "$ENDSERVICE"
-                exit
-                ;;
-            esac
-            #            read -p "テスト" SERVICEEXIT
-            #            case "$SERVICEEXIT" in
-            #            [yY])
-            #                echo "$SERVICECHECK"
-            #                count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-            #                if [ $count = 0 ]; then
-            #                    echo "$SERVICEDEAD"
-            #                else
-            #                    echo "$SERVICEALIVE"
-            #                fi
-            #                echo "$ENDSERVICE"
-            #                exit
-            #                ;;
-            #            esac
-            #            ;;
-            #        [nN]) echo "$ENDSERVICE" ;;
-            #        *) ;;
-            ;;
-        esac
-    fi
-}
-
 #------------------------------------------------------------------------------#
 case $1 in
-newstart)
-    newbotstart
-    ;;
-
-vercheck)
+vcheck)
     firststart
     if [ -e ./newversion.txt ]; then
-        vcheck
+        versioncheck
     else
         echo "$FILEFALSE"
         curl -sl https://akari.fiid.net/app/amb/newversion.txt >newversion.txt
@@ -686,8 +457,8 @@ start)
         read -p "$FILEDOWNLOAD " DATA
         case "$DATA" in
         [yY])
-            wget https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
-            mv ./JMusicBot-$VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
+            wget https://github.com/jagrosh/MusicBot/releases/download/$MUSIC_BOT_VERSION/JMusicBot-$VMUSIC_BOT_VERSION-$EDITION.jar
+            mv ./JMusicBot-$MUSIC_BOT_VERSION-$EDITION.jar $SELF_DIR_PATH/discord/music/
             cd $FILE
             $STARTPLUS
             echo "$SERVICECHECK"
@@ -775,7 +546,7 @@ invite)
     ;;
 
 #===========#
-#Token関係　 #
+#Token関係  #
 #===========#
 token)
     firststart
@@ -884,13 +655,6 @@ dev)
 #Botの機能のon/off　　#
 #===================#
 
-#setSettingsに統一された為、廃止
-#settings)
-#    echo "Botを起動する際にアップデートを確認する"
-#    echo "現在の設定: $setting_VersionCheck"
-#    echo "起動した際にBOTの招待URLを表示する"
-#    echo "現在の設定: $setting_botinvite"
-#    ;;
 setSettings)
     firststart
     . ./lib/setSettings.sh
@@ -922,25 +686,6 @@ extension)
                 echo "y or nを打ってね!"
             fi
         done
-
-        #        echo "Extension.txtが存在するか確認しています..."
-        #        if [ -e ./assets/settings.txt ]; then
-        #            echo "使用可能: yes/no"
-        #            read updatecheck
-        #            if [ $updatecheck = $setting_VersionCheck ]; then
-        #                echo "既に設定は "$setting_VersionCheck" に選択されています"
-        #            else
-        #                sed -i -e 's/setting_VersionCheck="'$setting_VersionCheck'"/setting_VersionCheck="'$updatecheck'"/' ./assets/settings.txt
-        #                if [ $updatecheck = $setting_VersionCheck ]; then
-        #                    echo "変更に失敗しました..."
-        #                else
-        #                    echo "変更に成功しました!"
-        #                fi
-        #            fi
-        #        else
-        #            echo "SettingsFileが存在しません..."
-        #            echo "exit 1"
-        #        fi
         ;;
     esac
     ;;
@@ -953,6 +698,7 @@ removedev)
         #１度目の初回入力でパスワードを入力しなかった場合、ご自分で
         #paswword.txtにパスワードを記入しても、正常に動作しなくなる可能性がある。
         #バグ有り
+        . ./assets/password.txt
         if [[ aXeHBw1dh8QLPhVuw40N = $password ]]; then
             echo "認証に成功..."
             if [ -n "$YOURNAME" ]; then
@@ -1022,51 +768,6 @@ removedev)
         fi
     fi
     ;;
-#動作しません。
-#setprefix)
-#        read SETPREFIX
-#    sed -e 's/$PREFIX/prefix = $SETPREFIX/g' $FILE/config.txt
-#
-#    ;;
-#startw)
-#    if [ -e $JAR ]; then
-#        echo "$FILETRUE"
-#        echo "$BOTSTART"
-#        cd $FILE
-#        java -jar JMusicBot-$VERSION-$EDITION.jar
-#        echo "$SERVICECHECK"
-#        count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-#        if [ $count = 0 ]; then
-#            echo "$SERVICEDEAD"
-#        else
-#            echo "$SERVICEALIVE"
-#        fi
-#        echo "$ENDSERVICE"
-#        exit
-#    else
-#        echo "$FAILNOTFOUND"
-#        read -p "$FILEDOWNLOAD " DATA
-#        case "$DATA" in
-#        [yY])
-#            wget -v https://github.com/jagrosh/MusicBot/releases/download/$VERSION/JMusicBot-$VERSION-$EDITION.jar
-#           mv ./JMusicBot-$VERSION-$EDITION.jar /home/$USER/デスクトップ/disocrd/musicbot/
-#           cd $FILE
-#           java -jar JMusicBot-$VERSION-$EDITION.jar
-#            echo "$SERVICECHECK"
-#            count=$(ps x -ef | grep $ProcessName | grep -v grep | wc -l)
-#            if [ $count = 0 ]; then
-#                echo "$SERVICEDEAD"
-#           else
-#                echo "$SERVICEALIVE"
-#            fi
-#            echo "$ENDSERVICE"
-#            exit
-#            ;;
-#        [nN]) echo "$ENDSERVICE" ;;
-#        *) ;;
-#        esac
-#    fi
-#    ;;
 *)
 
     echo -e "\033[1;37m##===========================##\033[0;39m"

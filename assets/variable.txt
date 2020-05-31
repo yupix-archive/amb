@@ -3,12 +3,12 @@
 #このファイルの内容を変更するにはどの変数がどこに使用されているかをきちんと確認し、
 #細心の注意を払っておこなってください。ShellScript等を作ったことがない方などは
 #誰か知り合い等を呼びサポートをしてもらいつつ変更することを推奨します。
-#このファイルが破損するとほぼ全ての動作が不安定になります。
+#このファイルが破損するとほぼすべての動作が不安定になります。
 
 #コマンド関連
-VERSION="0.2.7"
+MUSIC_BOT_VERSION="029"
 EDITION="Linux"
-ProcessName="JMusicBot-$VERSION-$EDITION.jar"
+ProcessName="JMusicBot-$MUSIC_BOT_VERSION-$EDITION.jar"
 
 #SYSTEM関連
 SCREEN_NAME=test
@@ -18,7 +18,7 @@ chars="/-\|"
 
 #ファイル関連
 FILE="./discord/music/"
-JAR="./discord/music/JMusicBot-$VERSION-$EDITION.jar"
+JAR="./discord/music/JMusicBot-$MUSIC_BOT_VERSION-$EDITION.jar"
 PASSWORDDILECTORY="./assets/password.txt"
 AMBSETTINGS="./assets/settings.txt"
 SYSTEMFILEMUSIC="./discord/music"

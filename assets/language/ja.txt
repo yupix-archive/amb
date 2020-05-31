@@ -79,6 +79,6 @@ cleanCcommand="cleanconfig: createconfigで生成したファイルを削除し�
 #cleanCcommand
 #------------------------------------------------------------------------------#
 #旧設定
-#JAR="/home/$USER/デスクトップ/disocrd/musicbot/JMusicBot-$VERSION-$EDITION.jar"
+#JAR="/home/$USER/デスクトップ/disocrd/musicbot/JMusicBot-$MUSIC_BOT_VERSION-$EDITION.jar"
 #FILE="/home/$USER/デスクトップ/disocrd/musicbot/"
 #------------------------------------------------------------------------------#
